@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model FailureLog {
+  id          Int      @id @default(autoincrement())
+  timestamp   DateTime @default(now())
+  type        String   // "HARDWARE", "SOFTWARE", "NETWORK", etc.
+  severity    String // "CRITICAL", "WARNING", "INFO"
+  description String?
+  isResolved  Boolean  @default(false)
+}
