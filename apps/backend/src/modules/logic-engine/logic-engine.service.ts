@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLogicEngineDto } from './dto/create-logic-engine.dto';
-import { UpdateLogicEngineDto } from './dto/update-logic-engine.dto';
 
 @Injectable()
 export class LogicEngineService {
-  create(createLogicEngineDto: CreateLogicEngineDto) {
+  create() {
     return 'This action adds a new logicEngine';
   }
 
@@ -16,7 +14,7 @@ export class LogicEngineService {
     return `This action returns a #${id} logicEngine`;
   }
 
-  update(id: number, updateLogicEngineDto: UpdateLogicEngineDto) {
+  update(id: number) {
     return `This action updates a #${id} logicEngine`;
   }
 

@@ -8,14 +8,16 @@ import {
   Delete,
 } from '@nestjs/common';
 import { FailuresService } from './failures.service';
+import { CreateFailureDto } from './dto/create-failure.dto';
+import { UpdateFailureDto } from './dto/update-failure.dto';
 
 @Controller('failures')
 export class FailuresController {
   constructor(private readonly failuresService: FailuresService) {}
 
   @Post()
-  create() {
-    return this.failuresService.create();
+  create(@Body() createFailureDto: CreateFailureDto) {
+    return this.failuresService.create(createFailureDto);
   }
 
   @Get()
@@ -29,8 +31,8 @@ export class FailuresController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.failuresService.update(+id);
+  update(@Param('id') id: string, @Body() updateFailureDto: UpdateFailureDto) {
+    return this.failuresService.update(+id, updateFailureDto);
   }
 
   @Delete(':id')

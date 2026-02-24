@@ -5,5 +5,6 @@ import { FailuresController } from './failures.controller';
 @Module({
   controllers: [FailuresController],
   providers: [FailuresService],
+  exports: [FailuresService],
 })
 export class FailuresModule {}
