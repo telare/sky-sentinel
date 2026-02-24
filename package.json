@@ -24,6 +24,7 @@
     "tmp": "^0.2.3"
   },
   "dependencies": {
+    "@nestjs/mapped-types": "*",
     "@prisma/client": "^7.4.1",
     "@tl21/eslint-custom": "^1.2.1"
   }

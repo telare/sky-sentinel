@@ -7,11 +7,37 @@ datasource db {
   provider = "postgresql"
 }
 
+enum FailureType {
+  HARDWARE
+  SOFTWARE
+  NETWORK
+  OTHER
+}
+
+enum Severity {
+  CRITICAL
+  WARNING
+  INFO
+}
+
 model FailureLog {
-  id          Int      @id @default(autoincrement())
-  timestamp   DateTime @default(now())
-  type        String   // "HARDWARE", "SOFTWARE", "NETWORK", etc.
-  severity    String // "CRITICAL", "WARNING", "INFO"
+  id          Int         @id @default(autoincrement())
+  timestamp   DateTime    @default(now())
+  type        FailureType
+  severity    Severity
   description String?
-  isResolved  Boolean  @default(false)
+  isResolved  Boolean     @default(false)
+}
+
+model UAVdata {
+  id            Int      @id @default(autoincrement())
+  timestamp     DateTime @default(now())
+  latitude      Float
+  longitude     Float
+  altitude      Float
+  airspeed      Float
+  pitch         Float
+  roll          Float
+  gear_status   Int
+  battery_level Float
 }
