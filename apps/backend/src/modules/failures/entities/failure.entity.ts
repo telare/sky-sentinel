@@ -1,4 +1,4 @@
-import { FailureType, Severity } from 'src/database/generated/prisma/enums';
+import { FailureType, Severity } from '@prisma/client';
 
 export class Failure {
   id: number;

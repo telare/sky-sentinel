@@ -42,35 +42,40 @@ src/
 ## 🧠 Architecture Philosophy
 
 ### 1. The `common/` Folder (Global Utilities)
-This is your "toolbox." It contains logic that is used across multiple features. 
-*   **Rule:** Nothing in `common/` should depend on anything in `modules/`.
-*   **Example:** A `RolesGuard` lives here because it is a generic utility used by the Users module, the Posts module, and the Billing module alike.
+
+This is your "toolbox." It contains logic that is used across multiple features.
+
+- **Rule:** Nothing in `common/` should depend on anything in `modules/`.
+- **Example:** A `RolesGuard` lives here because it is a generic utility used by the Users module, the Posts module, and the Billing module alike.
 
 ### 2. The `modules/` Folder (Feature-First)
+
 Unlike traditional MVC patterns where you have massive `controllers/` or `services/` folders at the root, we encapsulate everything by domain.
-*   **Why?** This makes the code highly modular. If you ever need to extract a feature (like "Users") into a separate microservice, you can simply copy the `users/` folder. It contains everything it needs to function.
+
+- **Why?** This makes the code highly modular. If you ever need to extract a feature (like "Users") into a separate microservice, you can simply copy the `users/` folder. It contains everything it needs to function.
 
 ### 3. Inside a Feature Module
+
 Every module follows a strict separation of concerns:
 
-*   **`controller.ts` (The Traffic Cop):** Handles incoming HTTP requests, parses headers/body, and returns responses. It contains **no business logic**.
-*   **`service.ts` (The Brain):** Contains all business logic. It handles database interactions, password hashing, and complex validation rules.
-*   **`dto/` (Data Transfer Objects):** Defines the shape of data coming into the API. We use `class-validator` decorators (e.g., `@IsEmail()`) here to ensure data integrity before it even hits the service.
-*   **`entities/`:** Defines the internal representation of data (the database schema/model).
+- **`controller.ts` (The Traffic Cop):** Handles incoming HTTP requests, parses headers/body, and returns responses. It contains **no business logic**.
+- **`service.ts` (The Brain):** Contains all business logic. It handles database interactions, password hashing, and complex validation rules.
+- **`dto/` (Data Transfer Objects):** Defines the shape of data coming into the API. We use `class-validator` decorators (e.g., `@IsEmail()`) here to ensure data integrity before it even hits the service.
+- **`entities/`:** Defines the internal representation of data (the database schema/model).
 
 ## 📏 Naming Conventions
 
 To maintain consistency across the team, follow these naming standards:
 
-| Type          | Convention                    | Example                       |
-| :------------ | :---------------------------- | :---------------------------- |
-| **Domain Folder** | Singular                      | `user/`, `account/`, `payee/` |
-| **Reusable Code** | Plural                        | `pipes/`, `utils/`, `guards/` |
-| **Service**       | `[name].service.ts`           | `user.service.ts`             |
-| **Module**        | `[name].module.ts`            | `auth.module.ts`              |
-| **DTO**           | `[action]-[entity].dto.ts`    | `create-user.dto.ts`          |
+| Type              | Convention                      | Example                       |
+| :---------------- | :------------------------------ | :---------------------------- |
+| **Domain Folder** | Singular                        | `user/`, `account/`, `payee/` |
+| **Reusable Code** | Plural                          | `pipes/`, `utils/`, `guards/` |
+| **Service**       | `[name].service.ts`             | `user.service.ts`             |
+| **Module**        | `[name].module.ts`              | `auth.module.ts`              |
+| **DTO**           | `[action]-[entity].dto.ts`      | `create-user.dto.ts`          |
 | **Client**        | `[provider]-[entity].client.ts` | `stripe-payment.client.ts`    |
-| **Guard/Pipe**    | `[name].guard.ts / .pipe.ts`  | `jwt.guard.ts`                |
+| **Guard/Pipe**    | `[name].guard.ts / .pipe.ts`    | `jwt.guard.ts`                |
 
 ---
 
@@ -78,10 +83,10 @@ To maintain consistency across the team, follow these naming standards:
 
 Testing is integrated into the development workflow rather than being an afterthought.
 
-| Type          | Location                      | Example                  |
-| :------------ | :---------------------------- | :----------------------- |
-| **Unit Test** | Beside implementation file    | `user.service.spec.ts`   |
-| **E2E Test**  | In `test/` or `e2e/` folder   | `user.e2e-spec.ts`       |
+| Type          | Location                    | Example                |
+| :------------ | :-------------------------- | :--------------------- |
+| **Unit Test** | Beside implementation file  | `user.service.spec.ts` |
+| **E2E Test**  | In `test/` or `e2e/` folder | `user.e2e-spec.ts`     |
 
-*   **Unit Tests:** Focus on isolated business logic within services.
-*   **E2E Tests:** Focus on the full request-response cycle, ensuring controllers, services, and the database work together.
+- **Unit Tests:** Focus on isolated business logic within services.
+- **E2E Tests:** Focus on the full request-response cycle, ensuring controllers, services, and the database work together.
