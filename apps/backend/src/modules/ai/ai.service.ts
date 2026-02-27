@@ -4,7 +4,7 @@ import {
   Injectable,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { FailureLog, UAVdata } from 'src/database/generated/prisma';
+import { FailureLog, UAVdata } from '@prisma/client';
 const FAILURE_ANALYZE_PROMPT = `
 You are an expert UAV (Unmanned Aerial Vehicle) Diagnostic Engineer. 
 Analyze telemetry data to diagnose flight failures for a drone.

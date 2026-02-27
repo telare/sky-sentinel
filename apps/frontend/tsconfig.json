@@ -41,5 +41,5 @@
       "@/store/*": ["./src/store/*"],
       "@/assets/*": ["./src/assets/*"]
     }
-  },
+  }
 }

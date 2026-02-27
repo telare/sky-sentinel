@@ -1,4 +1,3 @@
-
 # 🛰️ SkySentinel: UAV Failure Diagnosis System
 
 **SkySentinel** — це сучасна розподілена КІУС (Комп’ютеризована інформаційна управляюча система), розроблена для моніторингу телеметрії та інтелектуальної діагностики технічного стану БПЛА літакового типу в реальному часі.
@@ -13,32 +12,26 @@
 
 ### 1. Ground Segment (Frontend)
 
-* **Стек:** `React`, `TypeScript`, `Tailwind CSS`, `Recharts`.
-* **Функціонал:** * Інтерфейс у стилі "Glass Cockpit".
-* Панель **Master Caution** для візуалізації відмов.
-* Реал-тайм графіки телеметрії та 2D/3D карти польоту.
-* Генерація PDF-звітів про інциденти.
-
-
+- **Стек:** `React`, `TypeScript`, `Tailwind CSS`, `Recharts`.
+- **Функціонал:** \* Інтерфейс у стилі "Glass Cockpit".
+- Панель **Master Caution** для візуалізації відмов.
+- Реал-тайм графіки телеметрії та 2D/3D карти польоту.
+- Генерація PDF-звітів про інциденти.
 
 ### 2. Backend Segment (The Brain)
 
-* **Стек:** `NestJS`, `WebSockets (Socket.io)`, `Prisma ORM`, `PostgreSQL`.
-* **Логіка:**
-* **Telemetry Gateway:** Прийом потокових даних через WebSockets.
-* **Failure Service:** Детермінована логіка діагностики (Hard Landings, Stalls, Sensor Drifts).
-* **AI Engine:** Інтеграція з LLM API для інтерпретації аномалій та створення рекомендацій.
-
-
+- **Стек:** `NestJS`, `WebSockets (Socket.io)`, `Prisma ORM`, `PostgreSQL`.
+- **Логіка:**
+- **Telemetry Gateway:** Прийом потокових даних через WebSockets.
+- **Failure Service:** Детермінована логіка діагностики (Hard Landings, Stalls, Sensor Drifts).
+- **AI Engine:** Інтеграція з LLM API для інтерпретації аномалій та створення рекомендацій.
 
 ### 3. Infrastructure & DevOps (The Pipeline)
 
-* **Стек:** `Docker`, `Nginx`, `DigitalOcean VPS`, `Prometheus`, `Grafana`.
-* **Компоненти:**
-* **Data Bridge (Python):** Скрипт-емулятор/міст, що передає дані з радіомодема на NestJS.
-* **Monitoring:** Grafana-дашборди для контролю стану сервера та затримок мережі.
-
-
+- **Стек:** `Docker`, `Nginx`, `DigitalOcean VPS`, `Prometheus`, `Grafana`.
+- **Компоненти:**
+- **Data Bridge (Python):** Скрипт-емулятор/міст, що передає дані з радіомодема на NestJS.
+- **Monitoring:** Grafana-дашборди для контролю стану сервера та затримок мережі.
 
 ---
 
@@ -50,7 +43,6 @@
 2. **Методи контролю:** Впровадження **XOR-валідацію** цілісності пакетів (NMEA 0183) та Heartbeat-моніторинг зв'язку.
 3. **Логіка виявлення:** Поєднання жорстких порогів (Thresholds) та аналізу патернів за допомогою AI.
 4. **Дії у разі відмови:** Автоматичне формування Emergency Checklists та команд повернення на точку зльоту (RTL).
-
 
 ---
 
@@ -65,8 +57,8 @@
 
 ## 👥 The Team
 
-* **tl** — Lead Fullstack Developer (React UI, NestJS Core, Diagnostics Logic).
-* **Team Member 2** — DevOps & SRE Engineer (Infrastructure, Python Data Bridge, Monitoring, Deployment).
+- **tl** — Lead Fullstack Developer (React UI, NestJS Core, Diagnostics Logic).
+- **Team Member 2** — DevOps & SRE Engineer (Infrastructure, Python Data Bridge, Monitoring, Deployment).
 
 ---
 

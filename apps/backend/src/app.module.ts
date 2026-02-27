@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { FailuresModule } from './modules/failures/failures.module';
 import { AiModule } from './modules/ai/ai.module';
 import { ValidatorModule } from './modules/validator/validator.module';
@@ -22,7 +20,6 @@ import { TelemetryParserGateway } from './modules/temelemtry-parser/temelemtry-p
       }),
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService, TelemetryParserGateway],
+  providers: [TelemetryParserGateway],
 })
 export class AppModule {}

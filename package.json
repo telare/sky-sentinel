@@ -1,5 +1,5 @@
 {
-  "name": "mav-dashboard",
+  "name": "sky-sentinel",
   "private": true,
   "type": "module",
   "packageManager": "npm@10.0.0",
@@ -10,22 +10,30 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"/*.{ts,tsx,md}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json,css}\" --ignore-path .gitignore",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
     "prepare": "husky"
   },
+  "dependencies": {},
   "devDependencies": {
     "husky": "^9.1.7",
     "prisma": "^7.4.1",
-    "turbo": "^2.4.2"
+    "turbo": "^2.4.2",
+    "@eslint/eslintrc": "^3.3.4",
+    "@eslint/js": "^10.0.0",
+    "eslint": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.20.0"
   },
   "overrides": {
     "minimatch": "^10.0.0",
     "glob": "^10.0.0",
-    "tmp": "^0.2.3"
-  },
-  "dependencies": {
-    "@nestjs/mapped-types": "*",
-    "@prisma/client": "^7.4.1",
-    "@tl21/eslint-custom": "^1.2.1"
+    "tmp": "^0.2.3",
+    "hono": "^4.6.10",
+    "lodash": "^4.17.21"
   }
 }
