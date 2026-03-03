@@ -3,11 +3,108 @@ import { FailureLog, FailureType, Severity, UAVdata } from '@prisma/client';
 import { PrismaService } from 'src/database/prisma/prisma.service';
 import { CreateFailureDto } from './dto/create-failure.dto';
 import { UpdateFailureDto } from './dto/update-failure.dto';
-
+export interface FailureReport {
+  incidentId: string;
+  timestamp: string;
+  classification: {
+    type: string;
+    subsystem: string;
+    severity: string;
+  };
+  evidence: {
+    analyticalRedundancy: string;
+    sensorDelta: number;
+  };
+  failsafeAction: string; // From Section 5 of your notes
+}
 @Injectable()
 export class FailuresService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  generateReport(data: UAVdata, failureType: string): FailureReport {
+    let action = 'CONTINUE_MISSION';
+
+    if (failureType === 'PITOT_FAILURE') {
+      action = 'SWITCH_TO_GPS_NAVIGATION (Dead Reckoning)';
+    } else if (failureType === 'PROPULSION_FAILURE') {
+      action = 'GLIDE_TO_HOME_OR_EMERGENCY_LAND';
+    }
+
+    return {
+      incidentId: `INC-${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      classification: {
+        type: 'HARDWARE',
+        subsystem: failureType,
+        severity: 'CRITICAL',
+      },
+      evidence: {
+        analyticalRedundancy: `Airspeed(${data.airspeed}) vs GroundSpeed(${data.groundSpeed})`,
+        sensorDelta: Math.abs(data.airspeed - data.groundSpeed),
+      },
+      failsafeAction: action,
+    };
+  }
+  /**
+   * 1. Analytical Redundancy Block (Lecture №10)
+   * Compares Pitot Tube (Airspeed) vs GPS (Ground Speed)
+   */
+  async checkPitotFailure(
+    airspeed: number,
+    groundSpeed: number,
+    uavDataId: string,
+  ) {
+    const THRESHOLD = 15.0; // km/h (allowing for wind)
+
+    // Logic: |V_gps - V_airspeed| > threshold
+    if (Math.abs(groundSpeed - airspeed) > THRESHOLD) {
+      await this.create({
+        type: FailureType.HARDWARE,
+        severity: Severity.WARNING,
+        description: `Pitot Failure? High discrepancy: GPS ${groundSpeed} vs Airspeed ${airspeed}`,
+        uavDataId,
+      });
+    }
+  }
+
+  /**
+   * 2. Engine/Propeller Health Block (Section 3.3)
+   * Logic: High Throttle + Low Vertical Speed = Engine Failure
+   */
+  async checkPropulsionSystem(
+    throttle: number,
+    vsi: number,
+    uavDataId: string,
+  ) {
+    if (throttle > 80 && vsi < -1.0) {
+      await this.create({
+        type: FailureType.HARDWARE,
+        severity: Severity.CRITICAL,
+        description: `Propulsion Failure: High throttle but losing altitude!`,
+        uavDataId,
+      });
+    }
+  }
+
+  /**
+   * 3. Orientation Control Block (Section 3.2)
+   * Detects IMU drift or "Impossible" movements
+   */
+  async checkImuDrift(pitchRate: number, rollRate: number, uavDataId: string) {
+    const MAX_PHYSICAL_RATE = 120; // deg/sec (for fixed-wing)
+
+    if (
+      Math.abs(pitchRate) > MAX_PHYSICAL_RATE ||
+      Math.abs(rollRate) > MAX_PHYSICAL_RATE
+    ) {
+      await this.create({
+        type: FailureType.HARDWARE,
+        severity: Severity.CRITICAL,
+        description: `IMU Failure: Rotational rates exceed physical aircraft limits`,
+        uavDataId,
+      });
+    }
+  }
   /**
    * 1. GEODESY: GPS check and height
    */
@@ -228,20 +325,20 @@ export class FailuresService {
     return await this.prismaService.failureLog.findMany();
   }
 
-  async findOne(id: number): Promise<FailureLog | null> {
+  async findOne(id: string): Promise<FailureLog | null> {
     return await this.prismaService.failureLog.findUnique({
       where: { id },
     });
   }
 
-  async update(id: number, failureData: UpdateFailureDto): Promise<FailureLog> {
+  async update(id: string, failureData: UpdateFailureDto): Promise<FailureLog> {
     return await this.prismaService.failureLog.update({
       where: { id },
       data: { ...failureData },
     });
   }
 
-  async remove(id: number): Promise<FailureLog> {
+  async remove(id: string): Promise<FailureLog> {
     return await this.prismaService.failureLog.delete({
       where: {
         id,

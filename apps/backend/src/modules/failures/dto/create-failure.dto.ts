@@ -1,5 +1,5 @@
 import { FailureType, Severity } from '@prisma/client';
-import { IsString, IsEnum, IsNumber } from 'class-validator';
+import { IsString, IsEnum } from 'class-validator';
 export class CreateFailureDto {
   @IsEnum(FailureType)
   type: FailureType;
@@ -10,6 +10,6 @@ export class CreateFailureDto {
   @IsString()
   description: string;
 
-  @IsNumber()
-  uavDataId: number;
+  @IsString()
+  uavDataId: string;
 }

@@ -27,16 +27,16 @@ export class FailuresController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.failuresService.findOne(+id);
+    return this.failuresService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateFailureDto: UpdateFailureDto) {
-    return this.failuresService.update(+id, updateFailureDto);
+    return this.failuresService.update(id, updateFailureDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.failuresService.remove(+id);
+    return this.failuresService.remove(id);
   }
 }

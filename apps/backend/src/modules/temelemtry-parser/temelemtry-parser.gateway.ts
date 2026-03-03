@@ -8,11 +8,10 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import type {
-  UAVdataPacket,
-  ValidatorService,
-} from '../validator/validator.service';
+import type { UAVdataPacket } from '../validator/validator.service';
 import { FailuresService } from '../failures/failures.service';
+import { ValidatorService } from '../validator/validator.service';
+import { PrismaService } from 'src/database/prisma/prisma.service';
 
 @WebSocketGateway(3003, {
   cors: {
@@ -25,7 +24,10 @@ export class TelemetryParserGateway
   constructor(
     private readonly validationService: ValidatorService,
     private readonly failuresService: FailuresService,
-  ) {}
+    private readonly prismaService: PrismaService,
+  ) {
+    console.log('TelemetryParserGateway initialized on port 3003');
+  }
   @WebSocketServer() server: Server;
 
   handleConnection(client: Socket) {
@@ -44,37 +46,45 @@ export class TelemetryParserGateway
     try {
       const isValid = this.validationService.validate(packet);
       if (!isValid) {
+        console.log(`UAV/Client packet isn't valid: ${packet.data.id}`);
         return;
       }
       const { data } = packet;
-
+      const savedPacket = await this.prismaService.uAVdata.create({
+        data: {
+          ...data,
+          id: undefined,
+        },
+      });
       await Promise.all([
         this.failuresService.checkFlightDynamics(
-          data.verticalSpeed,
-          data.altitude,
-          data.airspeed,
-          data.pitch,
-          data.roll,
-          data.id,
+          savedPacket.verticalSpeed,
+          savedPacket.altitude,
+          savedPacket.airspeed,
+          savedPacket.pitch,
+          savedPacket.roll,
+          savedPacket.id,
         ),
         this.failuresService.checkHardwareStatus(
-          data.gear_status,
-          data.altitude,
-          data.battery_level,
-          data.temperature,
-          data.id,
+          savedPacket.gear_status,
+          savedPacket.altitude,
+          savedPacket.battery_level,
+          savedPacket.temperature,
+          savedPacket.id,
         ),
         this.failuresService.checkConnection(
-          data.rssi,
-          data.latency,
+          savedPacket.rssi,
+          savedPacket.latency,
           Date.now(),
-          data.id,
+          savedPacket.id,
         ),
       ]);
 
       this.server.emit('receive_ui_data', data);
 
-      console.log(`Processed packet from ${client.id} - id: ${data.id}`);
+      console.log(
+        `Обробка пакету даних від ${client.id} - id пакету: ${data.id}`,
+      );
     } catch (err: unknown) {
       console.error('error', err);
     }

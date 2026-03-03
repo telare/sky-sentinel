@@ -1,0 +1,12 @@
+{
+  "name": "@tl21/uav-simulation",
+  "version": "0.0.1",
+  "dependencies": {
+    "backend": "*"
+  },
+  "scripts": {
+    "dev": "./.venv/bin/python main.py",
+    "start": "./.venv/bin/python main.py",
+    "install:py": "pip install -r requirements.txt"
+  }
+}

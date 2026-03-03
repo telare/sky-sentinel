@@ -34,13 +34,13 @@ export class ValidatorService {
 
       if (!isValid) {
         console.error(
-          `[Validation] Checksum mismatch! Expected: ${hexResult}, Received: ${checksum}`,
+          `[Валідація] Чексума невідповідність! Очікуване: ${hexResult}, Отримане: ${checksum}`,
         );
       }
 
       return isValid;
     } catch (error) {
-      console.error('[Validation] Error during data validation:', error);
+      console.error('[Валідація] Помилка при валідації даних:', error);
       return false;
     }
   }

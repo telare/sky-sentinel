@@ -22,7 +22,7 @@ enum Severity {
 }
 
 model FailureLog {
-  id          Int         @id @default(autoincrement())
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   timestamp   DateTime    @default(now())
   type        FailureType
   severity    Severity
@@ -30,11 +30,11 @@ model FailureLog {
   isResolved  Boolean     @default(false)
 
   uavData   UAVdata @relation(fields: [uavDataId], references: [id])
-  uavDataId Int
+  uavDataId String  @db.Uuid
 }
 
 model UAVdata {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   timestamp DateTime @default(now())
 
   // Геодезичні дані
@@ -57,5 +57,13 @@ model UAVdata {
   rssi    Float? // Рівень сигналу (dBm)
   latency Float? // Затримка (ms)
 
-  logs FailureLog[]
+  // Added for Analytical Redundancy (Lecture №10)
+  groundSpeed  Float // From GPS (to compare with Airspeed)
+  throttle     Float // 0-100% (to compare with RPM/Vertical Speed)
+  servoCurrent Float // To detect servo stalls/blockage
+
+  // Emergency State (Section 5 of lectures)
+  logs          FailureLog[]
+
+  @@index([timestamp])
 }

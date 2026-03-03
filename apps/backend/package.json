@@ -21,7 +21,6 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@sky-sentinel/typescript": "*",
     "@google/genai": "^1.42.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.3",
@@ -32,6 +31,7 @@
     "@nestjs/websockets": "^11.1.14",
     "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "^7.4.2",
+    "@sky-sentinel/typescript": "*",
     "class-validator": "^0.14.4",
     "joi": "^18.0.2",
     "nestjs-zod": "^5.1.1",
@@ -46,6 +46,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
+    "@types/pg": "^8.18.0",
     "@types/supertest": "^6.0.2",
     "globals": "^16.0.0",
     "jest": "^30.2.0",
