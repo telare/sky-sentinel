@@ -9,6 +9,8 @@ import {
 
 import "./app.css";
 import type { Route } from "./+types/root";
+import UavDataProvider from "@/providers/UavDataProvider";
+import { useSocketConnection } from "@/hooks/useSocketConnection";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -42,7 +44,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const { telemetryEvents } = useSocketConnection();
+
+  return (
+    <UavDataProvider uavData={telemetryEvents}>
+      <Outlet />
+    </UavDataProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

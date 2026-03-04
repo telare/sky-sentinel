@@ -1,4 +1,4 @@
-import { Card, CardTitle } from "../ui";
+import { Card, CardTitle } from "@/components/ui";
 import AltitudeHistory from "./components/AltitudeHistory/AltitudeHistory";
 import BatteryLevelHistory from "./components/BatteryLevelHistory/BatteryLevelHistory";
 

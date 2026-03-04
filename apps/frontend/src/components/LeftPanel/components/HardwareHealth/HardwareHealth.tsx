@@ -1,5 +1,5 @@
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui";
 import { Battery, Thermometer, MoreHorizontal } from "lucide-react";
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from "../ui";
 
 interface HardwareHealthProps {
   battery: number;

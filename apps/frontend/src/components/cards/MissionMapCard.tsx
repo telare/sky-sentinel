@@ -1,9 +1,14 @@
-import { Suspense } from "react";
+import { Suspense, useContext } from "react";
 import { Card, CardContent, CardHeader } from "../ui";
 import { lazy } from "react";
+import { UavDataContext } from "@/providers";
 const UavMap = lazy(() => import("../../components/uavMap.client"));
 
 export default function MissionMapCard() {
+  const uavData = useContext(UavDataContext)?.data[0];
+  if (!uavData) return null;
+  const { latitude, longitude } = uavData;
+
   return (
     <Card className="w-full h-200 max-w-5xl">
       <CardHeader>Mission Map</CardHeader>
@@ -14,14 +19,14 @@ export default function MissionMapCard() {
           }
         >
           <UavMap
-            currentPos={[51.505, -0.09]}
+            currentPos={[latitude, longitude]}
             history={[
-              [51.505, -0.09],
-              [51.505, -0.08],
-              [51.505, -0.07],
-              [51.505, -0.05],
-              [51.505, -0.04],
-              [51.505, -0.03],
+              [latitude, longitude],
+              [latitude, longitude - 0.01],
+              [latitude, longitude - 0.02],
+              [latitude, longitude - 0.04],
+              [latitude, longitude - 0.05],
+              [latitude, longitude - 0.06],
             ]}
             homePos={[51.505, -0.09]}
           />

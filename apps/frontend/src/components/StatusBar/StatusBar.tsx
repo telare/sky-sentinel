@@ -1,12 +1,16 @@
-import {
-  Dot,
-  AlertTriangle,
-  Activity,
-  Gauge,
-} from "lucide-react";
+import { Dot, AlertTriangle, Activity } from "lucide-react";
 import StatusBarItem from "./components/StatusBarItem";
+import { useContext } from "react";
+import { UavDataContext } from "@/providers/UavDataProvider";
+import { useSocketConnection } from "@/hooks/useSocketConnection";
+import { useTimeConnected } from "./hooks";
 
 export function StatusBar() {
+  const uavData = useContext(UavDataContext)?.data[0];
+  if (!uavData) return null;
+  const { isConnected } = useSocketConnection();
+  const { timeConnected } = useTimeConnected(isConnected);
+
   return (
     <header className="flex w-full h-full items-center gap-2 py-2">
       {/* 1. Connection Status */}
@@ -14,7 +18,7 @@ export function StatusBar() {
         variant="success"
         isAlerting={true}
         icon={<Dot className="size-12 fill-current" />}
-        value="Connection: Active"
+        value={isConnected ? "Connection: Active" : "Connection: Inactive"}
       />
 
       {/* 2. Master Caution (Triggered by failuresService) */}
@@ -28,16 +32,16 @@ export function StatusBar() {
       {/* 3. System Heartbeat */}
       <StatusBarItem
         label="System Heartbeat:"
-        value="0.5s"
+        value={`${timeConnected}s`}
         icon={<Activity className="size-12 text-green-500" />}
       />
 
       {/* 4. Flight Mode */}
-      <StatusBarItem
+      {/* <StatusBarItem
         label="Flight Mode:"
         value="Autonomous"
         icon={<Gauge className="size-12 text-blue-400" />}
-      />
+      /> */}
 
       {/* 5. RTH Protocol (Action Button Variant) */}
       {/* <button className="ml-auto flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-6 py-2 text-[11px] font-bold uppercase tracking-widest text-slate-100 hover:bg-slate-700 transition-colors">

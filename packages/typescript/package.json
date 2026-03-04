@@ -5,6 +5,7 @@
   "private": true,
   "description": "TypeScript configuration for the monorepo",
   "exports": {
-    "./tsconfig.base.json": "./tsconfig.base.json"
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./types": "./types.ts"
   }
 }
