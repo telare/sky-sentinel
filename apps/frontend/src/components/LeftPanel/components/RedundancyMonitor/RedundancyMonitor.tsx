@@ -8,6 +8,7 @@ import {
   CardAction,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface RedundancyMonitorProps {
   airspeed: number;
@@ -18,6 +19,7 @@ export function RedundancyMonitor({
   airspeed,
   groundSpeed,
 }: RedundancyMonitorProps) {
+  const { t } = useTranslation();
   const delta = Math.abs(airspeed - groundSpeed).toFixed(3);
   const isOk = Number(delta) <= 15;
 
@@ -25,10 +27,8 @@ export function RedundancyMonitor({
     <Card className="w-full">
       <CardHeader>
         <div className="flex flex-col gap-1">
-          <CardTitle>Analytical Redundancy Monitor</CardTitle>
-          <CardDescription>
-            References principles from Lecture №10
-          </CardDescription>
+          <CardTitle>{t("redundancyMonitor.title")}</CardTitle>
+          <CardDescription>{t("redundancyMonitor.description")}</CardDescription>
         </div>
         <CardAction>
           <MoreHorizontal size={14} />
@@ -38,9 +38,7 @@ export function RedundancyMonitor({
         {/* Airspeed Section */}
         <div className="flex flex-col gap-1">
           <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">
-            Airspeed
-            <br />
-            (Pitot):
+            {t("redundancyMonitor.airspeed")}
           </span>
           <span className="text-3xl font-bold font-mono text-white">
             {airspeed}
@@ -52,9 +50,7 @@ export function RedundancyMonitor({
         {/* GroundSpeed Section */}
         <div className="flex flex-col gap-1">
           <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">
-            GroundSpeed
-            <br />
-            (GPS):
+            {t("redundancyMonitor.groundSpeed")}
           </span>
           <span className="text-3xl font-bold font-mono text-white">
             {groundSpeed}
@@ -87,7 +83,7 @@ export function RedundancyMonitor({
                   isOk ? "text-green-500" : "text-red-500",
                 )}
               >
-                {isOk ? "OK" : "FAIL"}
+                {isOk ? t("redundancyMonitor.ok") : t("redundancyMonitor.fail")}
               </span>
             </div>
           </div>

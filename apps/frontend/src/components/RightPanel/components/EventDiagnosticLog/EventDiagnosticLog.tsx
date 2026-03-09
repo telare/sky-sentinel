@@ -10,14 +10,16 @@ import { cn } from "@/lib/utils";
 import { Severity } from "@prisma/client";
 import { useGetFailureLogs } from "./hooks";
 import { Virtualizer } from "@/components/Virtualizer";
+import { useTranslation } from "react-i18next";
 
 export function EventDiagnosticLog() {
   const { failureLogs } = useGetFailureLogs();
+  const { t, i18n } = useTranslation();
 
   return (
     <Card className="h-full max-h-80 w-full">
       <CardHeader>
-        <CardTitle>Event & Diagnostic Log</CardTitle>
+        <CardTitle>{t("eventLog.title")}</CardTitle>
         <CardAction>
           <MoreHorizontal size={14} />
         </CardAction>
@@ -25,7 +27,7 @@ export function EventDiagnosticLog() {
       <CardContent className="flex h-full overflow-y-auto flex-col gap-0 px-0">
         {failureLogs.length === 0 && (
           <div className="flex items-center justify-center h-32 text-slate-500">
-            No log entries available.
+            {t("eventLog.noEntries")}
           </div>
         )}
         {failureLogs && (
@@ -50,7 +52,9 @@ export function EventDiagnosticLog() {
                 <div className="flex flex-col flex-1 gap-0.5">
                   <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400">
                     <span>
-                      {new Date(entry.timestamp).toLocaleString("uk-UA")}
+                      {new Date(entry.timestamp).toLocaleString(
+                        i18n.language === "ua" ? "uk-UA" : "en-US",
+                      )}
                     </span>
                     <span className="opacity-30">|</span>
                     <span className="font-bold text-slate-200">
@@ -65,7 +69,9 @@ export function EventDiagnosticLog() {
                       entry.severity === Severity.INFO && "text-green-500",
                     )}
                   >
-                    {entry.isResolved ? "RESOLVED" : "ACTIVE"}
+                    {entry.isResolved
+                      ? t("eventLog.resolved")
+                      : t("eventLog.active")}
                   </span>
                 </div>
 

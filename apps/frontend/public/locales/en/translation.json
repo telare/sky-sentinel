@@ -1,0 +1,46 @@
+{
+  "header": {
+    "title": "SkySentinel"
+  },
+  "statusBar": {
+    "connectionActive": "Connection: Active",
+    "connectionInactive": "Connection: Inactive",
+    "systemHeartbeat": "System Heartbeat:"
+  },
+  "hardwareHealth": {
+    "title": "Hardware Health & Battery",
+    "latency": "Latency"
+  },
+  "redundancyMonitor": {
+    "title": "Analytical Redundancy Monitor",
+    "description": "References principles from Lecture №10",
+    "airspeed": "Airspeed (Pitot):",
+    "groundSpeed": "GroundSpeed (GPS):",
+    "ok": "OK",
+    "fail": "FAIL"
+  },
+  "eventLog": {
+    "title": "Event & Diagnostic Log",
+    "noEntries": "No log entries available.",
+    "resolved": "RESOLVED",
+    "active": "ACTIVE"
+  },
+  "telemetryCharts": {
+    "title": "Telemetry Charts",
+    "altitudeHistory": "Altitude History (m)",
+    "batteryLevelHistory": "Battery Level History (%)",
+    "noData": "No data available"
+  },
+  "missionMap": {
+    "title": "Mission Map"
+  },
+  "errors": {
+    "oops": "Oops!",
+    "unexpected": "An unexpected error occurred.",
+    "notFound": "The requested page could not be found.",
+    "error": "Error"
+  },
+  "common": {
+    "toggleTheme": "Toggle theme"
+  }
+}

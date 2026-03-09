@@ -2,9 +2,11 @@ import { Suspense, useContext } from "react";
 import { Card, CardContent, CardHeader } from "../ui";
 import { lazy } from "react";
 import { UavDataContext } from "@/providers";
+import { useTranslation } from "react-i18next";
 const UavMap = lazy(() => import("../../components/uavMap.client"));
 
 export default function MissionMapCard() {
+  const { t } = useTranslation();
   const uavData = useContext(UavDataContext);
   if (!uavData) return null;
 
@@ -23,7 +25,7 @@ export default function MissionMapCard() {
 
   return (
     <Card className="w-full h-200 max-w-295 xl:max-w-5xl">
-      <CardHeader>Mission Map</CardHeader>
+      <CardHeader>{t("missionMap.title")}</CardHeader>
       <CardContent className="h-full p-0 relative">
         <Suspense
           fallback={

@@ -1,0 +1,46 @@
+{
+  "header": {
+    "title": "SkySentinel"
+  },
+  "statusBar": {
+    "connectionActive": "Зв'язок: Активний",
+    "connectionInactive": "Зв'язок: Неактивний",
+    "systemHeartbeat": "Системний пульс:"
+  },
+  "hardwareHealth": {
+    "title": "Стан обладнання та батареї",
+    "latency": "Затримка"
+  },
+  "redundancyMonitor": {
+    "title": "Монітор аналітичної надмірності",
+    "description": "Базується на принципах Лекції №10",
+    "airspeed": "Повітряна швидкість (Pitot):",
+    "groundSpeed": "Шляхова швидкість (GPS):",
+    "ok": "ОК",
+    "fail": "ПОМИЛКА"
+  },
+  "eventLog": {
+    "title": "Журнал подій та діагностики",
+    "noEntries": "Записи в журналі відсутні.",
+    "resolved": "ВИРІШЕНО",
+    "active": "АКТИВНО"
+  },
+  "telemetryCharts": {
+    "title": "Графіки телеметрії",
+    "altitudeHistory": "Історія висоти (м)",
+    "batteryLevelHistory": "Історія рівня заряду батареї (%)",
+    "noData": "Дані відсутні"
+  },
+  "missionMap": {
+    "title": "Карта місії"
+  },
+  "errors": {
+    "oops": "Ой!",
+    "unexpected": "Сталася неочікувана помилка.",
+    "notFound": "Запитувану сторінку не знайдено.",
+    "error": "Помилка"
+  },
+  "common": {
+    "toggleTheme": "Змінити тему"
+  }
+}

@@ -1,5 +1,12 @@
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui";
 import { Battery, Thermometer, MoreHorizontal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface HardwareHealthProps {
   battery: number;
@@ -12,10 +19,12 @@ export function HardwareHealth({
   temp,
   latency,
 }: HardwareHealthProps) {
+  const { t } = useTranslation();
+
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Hardware Health & Battery</CardTitle>
+        <CardTitle>{t("hardwareHealth.title")}</CardTitle>
         <CardAction>
           <MoreHorizontal size={14} />
         </CardAction>
@@ -52,7 +61,7 @@ export function HardwareHealth({
           </div>
           <div className="flex flex-col items-center">
             <span className="text-[9px] uppercase font-bold text-slate-500">
-              Latency
+              {t("hardwareHealth.latency")}
             </span>
             <span className="text-xs font-bold font-mono text-cyan-500">
               {latency}ms

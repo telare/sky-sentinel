@@ -14,6 +14,7 @@ import {
   CardAction,
   CardContent,
 } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 
 export function TelemetryMiniChart({
   title,
@@ -22,9 +23,11 @@ export function TelemetryMiniChart({
   title: string;
   data: { x: number; y: number }[] | undefined;
 }) {
-  const formatTime = (timeStr: string) => {
-    const date = new Date(timeStr);
-    return date.toLocaleTimeString("uk-UA", {
+  const { t, i18n } = useTranslation();
+
+  const formatTime = (time: number) => {
+    const date = new Date(time);
+    return date.toLocaleTimeString(i18n.language === "ua" ? "uk-UA" : "en-US", {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
@@ -114,7 +117,7 @@ export function TelemetryMiniChart({
             </AreaChart>
           </ResponsiveContainer>
         ) : (
-          <p className="text-slate-500 text-sm">No data available</p>
+          <p className="text-slate-500 text-sm">{t("telemetryCharts.noData")}</p>
         )}
       </CardContent>
     </Card>

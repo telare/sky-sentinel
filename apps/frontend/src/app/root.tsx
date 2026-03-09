@@ -8,9 +8,13 @@ import {
 } from "react-router";
 
 import "./app.css";
+import "../i18n.js";
 import type { Route } from "./+types/root";
 import UavDataProvider from "@/providers/UavDataProvider";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
+import useBrowserTheme from "@/hooks/useBrowserTheme.js";
+import { useTranslation } from "react-i18next";
+import ThemeContextProvider from "@/providers/ThemeProvider.js";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -26,8 +30,9 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { i18n } = useTranslation();
   return (
-    <html lang="en">
+    <html lang={i18n.language}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -48,21 +53,24 @@ export default function App() {
 
   return (
     <UavDataProvider uavData={telemetryEvents}>
-      <Outlet />
+      <ThemeContextProvider userTheme={useBrowserTheme()}>
+        <Outlet />
+      </ThemeContextProvider>
     </UavDataProvider>
   );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
-  let details = "An unexpected error occurred.";
+  const { t } = useTranslation();
+  let message = t("errors.oops");
+  let details = t("errors.unexpected");
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
+    message = error.status === 404 ? "404" : t("errors.error");
     details =
       error.status === 404
-        ? "The requested page could not be found."
+        ? t("errors.notFound")
         : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;

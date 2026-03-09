@@ -4,8 +4,10 @@ import { useContext } from "react";
 import { UavDataContext } from "@/providers/UavDataProvider";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 import { useTimeConnected } from "./hooks";
+import { useTranslation } from "react-i18next";
 
 export function StatusBar() {
+  const { t } = useTranslation();
   const uavData = useContext(UavDataContext);
   if (!uavData) return null;
   const { isConnected } = useSocketConnection();
@@ -18,7 +20,11 @@ export function StatusBar() {
         variant={isConnected ? "success" : "critical"}
         isAlerting={true}
         icon={<Dot className="size-12 fill-current" />}
-        value={isConnected ? "Connection: Active" : "Connection: Inactive"}
+        value={
+          isConnected
+            ? t("statusBar.connectionActive")
+            : t("statusBar.connectionInactive")
+        }
       />
 
       {/* 2. Master Caution (Triggered by failuresService) */}
@@ -31,9 +37,13 @@ export function StatusBar() {
 
       {/* 3. System Heartbeat */}
       <StatusBarItem
-        label="System Heartbeat:"
+        label={t("statusBar.systemHeartbeat")}
         value={`${timeConnected}s`}
-        icon={<Activity className={ `size-12 ${isConnected ? 'text-green-500' : 'text-red-500'}`} />}
+        icon={
+          <Activity
+            className={`size-12 ${isConnected ? "text-green-500" : "text-red-500"}`}
+          />
+        }
       />
 
       {/* 4. Flight Mode */}
