@@ -7,7 +7,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig(({ command }) => {
   const common = {
-    plugins: [reactRouter(), tailwindcss()], 
+    plugins: [reactRouter(), tailwindcss()],
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "src"),
@@ -16,11 +16,16 @@ export default defineConfig(({ command }) => {
         "@/assets": path.resolve(__dirname, "src", "assets"),
       },
     },
+    envDir: path.resolve(__dirname, "../../"),
   };
+
+  // dev 
   if (command === "serve") {
     return {
       plugins: [...common.plugins, qrcode()],
       resolve: common.resolve,
+      envDir: common.envDir,
+
       server: {
         port: 4173,
         open: true,
@@ -29,11 +34,10 @@ export default defineConfig(({ command }) => {
     };
   }
 
+  // build
   return {
-    plugins: [
-      ...common.plugins,
-      visualizer({ emitFile: false }),
-    ],
+    plugins: [...common.plugins, visualizer({ emitFile: false })],
     resolve: common.resolve,
+    envDir: common.envDir,
   };
 });

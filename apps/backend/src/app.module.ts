@@ -5,6 +5,7 @@ import { ValidatorModule } from './modules/validator/validator.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { TelemetryParseModule } from './modules/temelemtry-parser/telemetry-parser.module';
+import { join } from 'path';
 @Module({
   imports: [
     FailuresModule,
@@ -13,6 +14,7 @@ import { TelemetryParseModule } from './modules/temelemtry-parser/telemetry-pars
     TelemetryParseModule,
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: join(process.cwd(), '../../.env'),
       validationSchema: Joi.object({
         DATABASE_URL: Joi.string().required(),
         BACKEND_PORT: Joi.number().required(),

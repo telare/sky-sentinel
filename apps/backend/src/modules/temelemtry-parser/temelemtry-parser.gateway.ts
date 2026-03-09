@@ -11,7 +11,7 @@ import { Server, Socket } from 'socket.io';
 import type { UAVdataPacket } from '../validator/validator.service';
 import { FailuresService } from '../failures/failures.service';
 import { ValidatorService } from '../validator/validator.service';
-import { PrismaService } from 'src/database/prisma/prisma.service';
+import { PrismaService } from 'src/database/prisma.service';
 
 @WebSocketGateway(3003, {
   cors: {

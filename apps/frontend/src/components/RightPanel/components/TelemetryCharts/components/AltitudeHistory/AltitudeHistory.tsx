@@ -4,8 +4,8 @@ import { useContext } from "react";
 
 export default function AltitudeHistory() {
   const uavData = useContext(UavDataContext);
-  if (!uavData) return null;
-  const data = uavData.data.map((entry) => ({
+
+  const data = uavData?.data.map((entry) => ({
     x: new Date(entry.timestamp).getTime(),
     y: entry.altitude,
   }));

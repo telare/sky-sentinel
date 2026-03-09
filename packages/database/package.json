@@ -1,0 +1,11 @@
+{
+  "name": "@sky-sentinel/database",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Database configuration for the SkySentinel project",
+  "exports": {
+    "./config": "./prisma.config.ts",
+    "./index": "./index.ts"
+  }
+}

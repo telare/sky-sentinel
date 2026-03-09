@@ -20,7 +20,7 @@ export function TelemetryMiniChart({
   data,
 }: {
   title: string;
-  data: { x: number; y: number }[];
+  data: { x: number; y: number }[] | undefined;
 }) {
   const formatTime = (timeStr: string) => {
     const date = new Date(timeStr);
@@ -42,59 +42,80 @@ export function TelemetryMiniChart({
         </CardAction>
       </CardHeader>
 
-      <CardContent className="h-35 w-full p-0 pt-4">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
-            data={data}
-            margin={{ top: 5, right: 15, left: -20, bottom: 0 }}
-          >
-            <defs>
-              <linearGradient id="colorAlt" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#2dd4bf" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#2dd4bf" stopOpacity={0} />
-              </linearGradient>
-            </defs>
+      <CardContent className="h-35 w-full p-0 pt-4 flex justify-center items-center">
+        {data && data.length !== 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={data}
+              margin={{ top: 5, right: 15, left: -20, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="colorAlt" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#2dd4bf" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#2dd4bf" stopOpacity={0} />
+                </linearGradient>
+              </defs>
 
-            <CartesianGrid
-              strokeDasharray="0"
-              vertical={true}
-              horizontal={true}
-              stroke="#1e293b"
-              opacity={0.5}
-            />
+              <CartesianGrid
+                strokeDasharray="0"
+                vertical={true}
+                horizontal={true}
+                stroke="#1e293b"
+                opacity={0.5}
+              />
 
-            <XAxis
-              dataKey="x"
-              type="number"
-              scale="time"
-              domain={["auto", "auto"]}
-              axisLine={false}
-              tickFormatter={formatTime}
-              minTickGap={30}
-              tickLine={false}
-              tick={{ fill: "#64748b", fontSize: 10, fontFamily: "monospace" }}
-              dy={5}
-            />
+              <XAxis
+                dataKey="x"
+                type="number"
+                scale="time"
+                domain={["auto", "auto"]}
+                axisLine={false}
+                tickFormatter={formatTime}
+                minTickGap={30}
+                tickLine={false}
+                tick={{
+                  fill: "#64748b",
+                  fontSize: 10,
+                  fontFamily: "monospace",
+                }}
+                dy={5}
+              />
 
-            <YAxis
-              domain={["auto", "auto"]}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "#64748b", fontSize: 10, fontFamily: "monospace" }}
-            />
+              <YAxis
+                domain={[
+                  (min: number) => {
+                    const padding = Math.abs(min * 0.2);
+                    return Math.floor(min - padding);
+                  },
+                  (max: number) => {
+                    const padding = Math.abs(max * 0.2);
+                    return Math.ceil(max + padding);
+                  },
+                ]}
+                axisLine={false}
+                tickLine={false}
+                tick={{
+                  fill: "#64748b",
+                  fontSize: 10,
+                  fontFamily: "monospace",
+                }}
+              />
 
-            <Area
-              type="monotone"
-              dataKey="y"
-              stroke="#2dd4bf"
-              strokeWidth={2}
-              fillOpacity={1}
-              fill="url(#colorAlt)"
-              isAnimationActive={true}
-              animationDuration={1500}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+              <Area
+                type="monotone"
+                dataKey="y"
+                stroke="#2dd4bf"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#colorAlt)"
+                isAnimationActive={true}
+                animationDuration={1500}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        ) : (
+          <p className="text-slate-500 text-sm">No data available</p>
+        )}
       </CardContent>
     </Card>
   );

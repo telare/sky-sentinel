@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { FailureLog, FailureType, Severity, UAVdata } from '@prisma/client';
-import { PrismaService } from 'src/database/prisma/prisma.service';
 import { CreateFailureDto } from './dto/create-failure.dto';
 import { UpdateFailureDto } from './dto/update-failure.dto';
+import { PrismaService } from 'src/database/prisma.service';
 export interface FailureReport {
   incidentId: string;
   timestamp: string;
