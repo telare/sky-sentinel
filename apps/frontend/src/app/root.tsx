@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "react-router";
 
 import "./app.css";
@@ -13,8 +14,10 @@ import type { Route } from "./+types/root";
 import UavDataProvider from "@/providers/UavDataProvider";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 import { useTranslation } from "react-i18next";
-import ThemeContextProvider from "@/providers/ThemeProvider.js";
-import { Suspense } from "react";
+import ThemeContextProvider from "@/providers/ThemeProvider";
+import { Suspense, useEffect } from "react";
+import { CookiesProvider } from "react-cookie";
+import { getLocale, initI18nServer } from "../i18n.server";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -29,10 +32,26 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export async function loader({ request }: Route.LoaderArgs) {
+  const locale = await getLocale(request);
+  // Ensure i18n is initialized on server for this request
+  await initI18nServer(locale);
+  return { locale };
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { locale } = useLoaderData<typeof loader>() || { locale: "en" };
   const { i18n } = useTranslation();
+
+  // Sync i18n language with loader data on initial client render only once
+  useEffect(() => {
+    if (i18n.language !== locale) {
+      i18n.changeLanguage(locale);
+    }
+  }, []);
+
   return (
-    <html lang={i18n.language}>
+    <html lang={i18n.language} dir={i18n.dir()}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -50,15 +69,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const { telemetryEvents } = useSocketConnection();
+  const { i18n } = useTranslation();
+
+  // Update cookie when language changes
+  useEffect(() => {
+    if (i18n.language) {
+      document.cookie = `i18n-locale=${i18n.language}; path=/; Max-Age=31536000; SameSite=Lax`;
+    }
+  }, [i18n.language]);
 
   return (
-    <UavDataProvider uavData={telemetryEvents}>
-      <ThemeContextProvider>
-        <Suspense fallback="Loading...">
-          <Outlet />
-        </Suspense>
-      </ThemeContextProvider>
-    </UavDataProvider>
+    <CookiesProvider defaultSetOptions={{ path: "/" }}>
+      <UavDataProvider uavData={telemetryEvents}>
+        <ThemeContextProvider>
+          <Suspense fallback="Loading...">
+            <Outlet />
+          </Suspense>
+        </ThemeContextProvider>
+      </UavDataProvider>
+    </CookiesProvider>
   );
 }
 

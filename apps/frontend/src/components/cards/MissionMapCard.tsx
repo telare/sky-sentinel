@@ -1,4 +1,4 @@
-import { Suspense, useContext } from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "../ui";
 import { lazy } from "react";
 import { UavDataContext } from "@/providers";
@@ -10,6 +10,12 @@ export default function MissionMapCard() {
   const uavData = useContext(UavDataContext);
   if (!uavData) return null;
 
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!uavData) return null;
   const { latitude: currentLatitude, longitude: currentLongitude } = uavData
     .data[uavData.data.length - 1] || {
     latitude: 0,
@@ -23,21 +29,25 @@ export default function MissionMapCard() {
     entry.longitude,
   ]);
 
+  const LoadingSkeleton = (
+    <div className="bg-muted rounded-md animate-pulse h-full w-full" />
+  );
+
   return (
     <Card className="w-full h-200 max-w-295 xl:max-w-5xl">
       <CardHeader>{t("missionMap.title")}</CardHeader>
       <CardContent className="h-full p-0 relative">
-        <Suspense
-          fallback={
-            <div className="bg-muted animate-pulse h-full w-full" />
-          }
-        >
-          <UavMap
-            currentPos={[currentLatitude, currentLongitude]}
-            homePos={homePos}
-            history={history}
-          />
-        </Suspense>
+        {!isMounted ? (
+          LoadingSkeleton
+        ) : (
+          <Suspense fallback={LoadingSkeleton}>
+            <UavMap
+              currentPos={[currentLatitude, currentLongitude]}
+              homePos={homePos}
+              history={history}
+            />
+          </Suspense>
+        )}
       </CardContent>
     </Card>
   );

@@ -4,7 +4,9 @@ import {
   useContext,
   useLayoutEffect,
   useState,
+  useEffect,
 } from "react";
+import { useCookies } from "react-cookie";
 
 export type SupportedThemes = "light" | "dark";
 
@@ -25,30 +27,39 @@ export default function ThemeContextProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [cookies, setCookie] = useCookies(["theme-preference"]);
+  const browserTheme = useBrowserTheme();
+
   const [theme, setTheme] = useState<SupportedThemes>(() => {
-    if (typeof window !== "undefined") {
-      const savedTheme = localStorage.getItem(
-        "theme-preference",
-      ) as SupportedThemes;
-      if (savedTheme) return savedTheme;
-    }
-    const theme = useBrowserTheme();
-    return theme;
+    if (cookies["theme-preference"]) return cookies["theme-preference"];
+    return "dark";
   });
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    if (cookies["theme-preference"]) {
+      setTheme(cookies["theme-preference"]);
+    } else {
+      setTheme(browserTheme);
+    }
+  }, []);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
   useLayoutEffect(() => {
+    if (!isMounted) return;
+
     const root = window.document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
     } else {
       root.classList.remove("dark");
     }
-    localStorage.setItem("theme-preference", theme);
-  }, [theme]);
+    setCookie("theme-preference", theme, { path: "/" });
+  }, [theme, isMounted]);
 
   const value = {
     userTheme: theme,
