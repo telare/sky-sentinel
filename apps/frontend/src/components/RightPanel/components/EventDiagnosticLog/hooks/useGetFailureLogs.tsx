@@ -22,7 +22,6 @@ export const useGetFailureLogs = () => {
   useEffect(() => {
     fetchFailures()
       .then(({ failureLogs }) => {
-        console.log("Fetched failure logs:", failureLogs);
         setFailureLogs(failureLogs);
       })
       .catch((error) => {

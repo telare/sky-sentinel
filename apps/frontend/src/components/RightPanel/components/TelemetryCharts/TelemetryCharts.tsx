@@ -1,7 +1,7 @@
 import { Card, CardTitle, CardHeader } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import { useContext } from "react";
-import { UavDataContext } from "@/providers";
+import { ChartsHistoryContext } from "@/providers";
 import { TelemetryMiniChart } from "@/components/TelemetryMiniChart";
 import type { UAVdata } from "@sky-sentinel/typescript/types";
 
@@ -29,7 +29,7 @@ const CHART_CONFIGS: ChartConfig[] = [
 
 export default function TelemetryCharts() {
   const { t } = useTranslation();
-  const uavData = useContext(UavDataContext);
+  const chartsHistory = useContext(ChartsHistoryContext);
 
   return (
     <Card className="w-full bg-slate-950/20 border-slate-900 shadow-xl overflow-hidden">
@@ -42,7 +42,7 @@ export default function TelemetryCharts() {
       
       <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
         {CHART_CONFIGS.map((config) => {
-          const chartData = uavData?.data.map((entry) => ({
+          const chartData = chartsHistory.map((entry) => ({
             x: new Date(entry.timestamp).getTime(),
             y: (entry[config.field] as number) * (config.multiplier || 1),
           }));

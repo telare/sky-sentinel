@@ -1,12 +1,12 @@
 import { TelemetryMiniChart } from "@/components/TelemetryMiniChart";
-import { UavDataContext } from "@/providers";
+import { ChartsHistoryContext } from "@/providers";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function BatteryLevelHistory() {
   const { t } = useTranslation();
-  const uavData = useContext(UavDataContext);
-  const data = uavData?.data.map((entry) => ({
+  const chartsHistory = useContext(ChartsHistoryContext);
+  const data = chartsHistory.map((entry) => ({
     x: new Date(entry.timestamp).getTime(),
     y: entry.battery_level,
   }));

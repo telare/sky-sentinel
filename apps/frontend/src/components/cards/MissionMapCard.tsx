@@ -1,38 +1,36 @@
 import { Suspense, useContext, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "../ui";
 import { lazy } from "react";
-import { UavDataContext } from "@/providers";
+import { FlightHistoryContext } from "@/providers";
 import { useTranslation } from "react-i18next";
 const UavMap = lazy(() => import("../../components/uavMap.client"));
 
 export default function MissionMapCard() {
   const { t } = useTranslation();
-  const uavData = useContext(UavDataContext);
-  if (!uavData) return null;
+  const flightHistory = useContext(FlightHistoryContext);
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  if (!uavData) return null;
-  const { latitude: currentLatitude, longitude: currentLongitude } = uavData
-    .data[uavData.data.length - 1] || {
-    latitude: 0,
-    longitude: 0,
+  const { lat: currentLatitude, lng: currentLongitude } = flightHistory[
+    flightHistory.length - 1
+  ] || {
+    lat: 0,
+    lng: 0,
   };
-  const homePos: [number, number] = uavData.data[0]
-    ? [uavData.data[0].latitude, uavData.data[0].longitude]
+
+  const homePos: [number, number] = flightHistory[0]
+    ? [flightHistory[0].lat, flightHistory[0].lng]
     : [51.505, -0.09];
-  const history: [number, number][] = uavData.data.map((entry) => [
-    entry.latitude,
-    entry.longitude,
-  ]);
+
+  const history = flightHistory;
 
   const LoadingSkeleton = (
     <div className="bg-muted rounded-md animate-pulse h-full w-full" />
   );
-
+  console.log(flightHistory, { lat: currentLatitude, lng: currentLongitude }, homePos)
   return (
     <Card className="w-full h-200 max-w-295 xl:max-w-5xl">
       <CardHeader>{t("missionMap.title")}</CardHeader>
@@ -42,7 +40,10 @@ export default function MissionMapCard() {
         ) : (
           <Suspense fallback={LoadingSkeleton}>
             <UavMap
-              currentPos={[currentLatitude, currentLongitude]}
+              currentPos={{
+                lat: currentLatitude,
+                lng: currentLongitude,
+              }}
               homePos={homePos}
               history={history}
             />

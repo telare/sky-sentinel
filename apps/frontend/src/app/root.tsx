@@ -12,8 +12,6 @@ import {
 import "./app.css";
 import "../i18n.js";
 import type { Route } from "./+types/root";
-import UavDataProvider from "@/providers/UavDataProvider";
-import { useSocketConnection } from "@/hooks/useSocketConnection";
 import { useTranslation } from "react-i18next";
 import ThemeContextProvider from "@/providers/ThemeProvider";
 import { Suspense, useEffect, useState } from "react";
@@ -72,7 +70,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const { telemetryEvents } = useSocketConnection();
   const { i18n } = useTranslation();
   const [queryClient] = useState(() => new QueryClient());
 
@@ -86,13 +83,11 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <CookiesProvider defaultSetOptions={{ path: "/" }}>
-        <UavDataProvider uavData={telemetryEvents}>
-          <ThemeContextProvider>
-            <Suspense fallback="Loading...">
-              <Outlet />
-            </Suspense>
-          </ThemeContextProvider>
-        </UavDataProvider>
+        <ThemeContextProvider>
+          <Suspense fallback="Loading...">
+            <Outlet />
+          </Suspense>
+        </ThemeContextProvider>
       </CookiesProvider>
     </QueryClientProvider>
   );
@@ -143,9 +138,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
             <h2 className="text-xl font-semibold text-foreground">
               {t("errors.diagnostic_report")}
             </h2>
-            <p className="text-muted-foreground leading-relaxed">
-              {details}
-            </p>
+            <p className="text-muted-foreground leading-relaxed">{details}</p>
           </div>
 
           {stack && (

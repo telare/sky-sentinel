@@ -109,19 +109,20 @@ export function TelemetryMiniChart({
               />
 
               <Area
-                type="monotone"
+                type="linear"
                 dataKey="y"
                 stroke={color}
                 strokeWidth={2}
                 fillOpacity={1}
                 fill={`url(#${gradientId})`}
-                isAnimationActive={true}
-                animationDuration={1500}
+                isAnimationActive={false}
               />
             </AreaChart>
           </ResponsiveContainer>
         ) : (
-          <p className="text-slate-500 text-sm">{t("telemetryCharts.noData")}</p>
+          <p className="text-slate-500 text-sm">
+            {t("telemetryCharts.noData")}
+          </p>
         )}
       </CardContent>
     </Card>

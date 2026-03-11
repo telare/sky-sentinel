@@ -1,18 +1,17 @@
 import { useContext } from "react";
-import { UavDataContext } from "@/providers";
+import { LatestTelemetryContext } from "@/providers";
 import { HardwareHealth, RedundancyMonitor } from "./components";
 
 export default function LeftPanel() {
-  const uavData = useContext(UavDataContext);
-  if (!uavData) return null;
-  const { airspeed, groundSpeed, battery_level, temperature, latency } = uavData
-    .data[uavData.data.length - 1] || {
-    airspeed: 0,
-    groundSpeed: 0,
-    battery_level: 0,
-    temperature: 0,
-    latency: 0,
-  };
+  const latestData = useContext(LatestTelemetryContext);
+  const { airspeed, groundSpeed, battery_level, temperature, latency } =
+    latestData || {
+      airspeed: 0,
+      groundSpeed: 0,
+      battery_level: 0,
+      temperature: 0,
+      latency: 0,
+    };
 
   return (
     <aside className="h-full w-full flex flex-col justify-start items-center gap-y-4">

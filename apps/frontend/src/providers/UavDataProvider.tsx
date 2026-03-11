@@ -1,24 +1,52 @@
-import { createContext, useMemo } from "react";
+import { createContext } from "react";
 import type { UAVdata } from "@sky-sentinel/typescript/types";
 
-export const UavDataContext = createContext<{
-  data: UAVdata[];
-} | null>(null);
+export type FlightPathPoint = { lat: number; lng: number };
 
-export default function UavDataProvider({
-  uavData,
+// 1. Contexts
+export const LatestTelemetryContext = createContext<UAVdata | null>(null);
+export const FlightHistoryContext = createContext<FlightPathPoint[]>([]);
+export const ChartsHistoryContext = createContext<UAVdata[]>([]);
+
+// 2. Separate Providers
+export function LatestTelemetryProvider({
+  value,
   children,
 }: {
-  uavData: UAVdata[];
+  value: UAVdata | null;
   children: React.ReactNode;
 }) {
-  const value = useMemo(
-    () => ({
-      data: uavData,
-    }),
-    [uavData],
-  );
   return (
-    <UavDataContext.Provider value={value}>{children}</UavDataContext.Provider>
+    <LatestTelemetryContext.Provider value={value}>
+      {children}
+    </LatestTelemetryContext.Provider>
+  );
+}
+
+export function FlightHistoryProvider({
+  value,
+  children,
+}: {
+  value: FlightPathPoint[];
+  children: React.ReactNode;
+}) {
+  return (
+    <FlightHistoryContext.Provider value={value}>
+      {children}
+    </FlightHistoryContext.Provider>
+  );
+}
+
+export function ChartsHistoryProvider({
+  value,
+  children,
+}: {
+  value: UAVdata[];
+  children: React.ReactNode;
+}) {
+  return (
+    <ChartsHistoryContext.Provider value={value}>
+      {children}
+    </ChartsHistoryContext.Provider>
   );
 }

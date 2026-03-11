@@ -1,13 +1,16 @@
 import { io, Socket } from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
 import type { UAVdata } from "@sky-sentinel/typescript/types";
+import type { FlightPathPoint } from "@/providers/UavDataProvider";
 
 export const useSocketConnection = () => {
   const URL =
     process.env.NODE_ENV === "production" ? undefined : "http://localhost:3003";
 
   const [isConnected, setIsConnected] = useState(false);
-  const [telemetryEvents, setTelemetryEvents] = useState<UAVdata[]>([]);
+  const [latestTelemetry, setLatestTelemetry] = useState<UAVdata | null>(null);
+  const [flightHistory, setFlightHistory] = useState<FlightPathPoint[]>([]);
+  const [chartsHistory, setChartsHistory] = useState<UAVdata[]>([]);
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
@@ -18,7 +21,6 @@ export const useSocketConnection = () => {
     socket.on("connect", onConnect);
 
     function onConnect() {
-      console.log("Connected to telemetry server");
       setIsConnected(true);
     }
     if (socket.connected) {
@@ -26,13 +28,24 @@ export const useSocketConnection = () => {
     }
 
     function onDisconnect() {
-      console.log("Disconnected from telemetry server");
       setIsConnected(false);
     }
 
     function onTelemetryEvent(value: UAVdata) {
-      console.log("Received receive_ui_data event", value);
-      setTelemetryEvents((previous) => [...previous, value]);
+      setLatestTelemetry(value);
+
+      setFlightHistory((prev) => [
+        ...prev,
+        { lat: value.latitude, lng: value.longitude },
+      ]);
+
+      const MAX_CHARTS_HISTORY = 10;
+      setChartsHistory((prev) => {
+        const next = [...prev, value];
+        return next.length > MAX_CHARTS_HISTORY
+          ? next.slice(next.length - MAX_CHARTS_HISTORY)
+          : next;
+      });
     }
 
     socket.on("disconnect", onDisconnect);
@@ -49,5 +62,5 @@ export const useSocketConnection = () => {
     };
   }, []);
 
-  return { isConnected, telemetryEvents };
+  return { isConnected, latestTelemetry, flightHistory, chartsHistory };
 };
