@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DialogClose } from "@/components/ui/dialog";
+import { useTranslation } from "react-i18next";
 
 interface AiStatusHeaderProps {
   severity: string;
@@ -9,12 +10,13 @@ interface AiStatusHeaderProps {
 
 export function AiStatusHeader({ severity, timestamp }: AiStatusHeaderProps) {
   const formattedTime = new Date(timestamp).toLocaleTimeString();
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-wrap items-start justify-between mb-6 gap-3">
       <div className="space-y-2">
         <h2 className="text-xl  font-bold tracking-wider text-slate-100 uppercase flex items-center gap-2">
-          INCIDENT FORENSICS
+          {t("aiAnalyzeModal.header.title")}
         </h2>
         <div className="flex items-center gap-2">
           <span className="relative flex h-2.5 w-2.5">
@@ -22,7 +24,7 @@ export function AiStatusHeader({ severity, timestamp }: AiStatusHeaderProps) {
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
           </span>
           <span className="text-xs font-semibold text-slate-400 tracking-widest uppercase">
-            Live Analysis — {formattedTime}
+            {t("aiAnalyzeModal.header.liveAnalysis")} — {formattedTime}
           </span>
         </div>
       </div>

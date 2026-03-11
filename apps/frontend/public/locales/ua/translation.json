@@ -55,5 +55,54 @@
   },
   "common": {
     "toggleTheme": "Змінити тему"
+  },
+  "aiAnalyzeModal": {
+    "title": "Криміналістичний аналіз інциденту",
+    "header": {
+      "title": "ДІАГНОСТИКА ІНЦИДЕНТУ",
+      "liveAnalysis": "Аналіз у реальному часі"
+    },
+    "status": {
+      "analyzing": "Аналіз телеметрії...",
+      "failed": "Аналіз не вдався",
+      "rootCause": "Першопричина"
+    },
+    "panels": {
+      "evidence": {
+        "title": "Доказова база",
+        "snapshot": "Знімок телеметрії",
+        "pitch": "Тангаж",
+        "roll": "Крен",
+        "throttle": "Тяга",
+        "vsi": "ВШ"
+      },
+      "aiAnalysis": {
+        "title": "Панель ШІ-аналізу",
+        "explanation": "Пояснення",
+        "suggestedAction": "Рекомендована дія"
+      }
+    },
+    "actions": {
+      "downloadPdf": "Завантажити PDF-звіт",
+      "preparingPdf": "Підготовка документа...",
+      "executeFailsafe": "Активувати Failsafe (RTL)",
+      "acknowledgeClose": "Прийняти та закрити"
+    },
+    "report": {
+      "title": "Звіт SkySentinel про інцидент",
+      "subtitle": "Автоматизований форензичний аналіз",
+      "incidentId": "ID інциденту",
+      "overview": "Огляд інциденту",
+      "description": "Опис",
+      "severity": "Критичність",
+      "aiDiagnostic": "ШІ-діагностичний аналіз",
+      "suggestedRemediation": "Рекомендоване виправлення",
+      "telemetryEvidence": "Телеметричні докази (на момент T-0)",
+      "verticalSpeed": "Вертикальна швидкість",
+      "airspeed": "Повітряна швидкість",
+      "altitude": "Висота",
+      "confidential": "SkySentinel OS v1.0.4 - Конфіденційний технічний звіт",
+      "page": "Сторінка"
+    }
   }
 }

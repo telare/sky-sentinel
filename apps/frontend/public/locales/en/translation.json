@@ -55,5 +55,54 @@
   },
   "common": {
     "toggleTheme": "Toggle theme"
+  },
+  "aiAnalyzeModal": {
+    "title": "Incident Forensics Analysis",
+    "header": {
+      "title": "INCIDENT FORENSICS",
+      "liveAnalysis": "Live Analysis"
+    },
+    "status": {
+      "analyzing": "Analyzing Telemetry...",
+      "failed": "Analysis Failed",
+      "rootCause": "Root Cause"
+    },
+    "panels": {
+      "evidence": {
+        "title": "The Evidence",
+        "snapshot": "Telemetry Snapshot",
+        "pitch": "Pitch",
+        "roll": "Roll",
+        "throttle": "Throttle",
+        "vsi": "VSI"
+      },
+      "aiAnalysis": {
+        "title": "AI Analysis Panel",
+        "explanation": "Explanation",
+        "suggestedAction": "Suggested Action"
+      }
+    },
+    "actions": {
+      "downloadPdf": "Download PDF Report",
+      "preparingPdf": "Preparing document...",
+      "executeFailsafe": "Execute Failsafe (RTL)",
+      "acknowledgeClose": "Acknowledge & Close"
+    },
+    "report": {
+      "title": "SkySentinel Incident Report",
+      "subtitle": "Automated Forensics Analysis",
+      "incidentId": "Incident ID",
+      "overview": "Incident Overview",
+      "description": "Description",
+      "severity": "Severity",
+      "aiDiagnostic": "AI Diagnostic Analysis",
+      "suggestedRemediation": "Suggested Remediation",
+      "telemetryEvidence": "Telemetry Evidence (at T-0)",
+      "verticalSpeed": "Vertical Speed",
+      "airspeed": "Airspeed",
+      "altitude": "Altitude",
+      "confidential": "SkySentinel OS v1.0.4 - Confidential Technical Report",
+      "page": "Page"
+    }
   }
 }

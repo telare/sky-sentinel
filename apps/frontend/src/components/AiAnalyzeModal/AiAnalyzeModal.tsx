@@ -148,36 +148,38 @@ const AiFailureReport = ({
   analysis,
   telemetry,
   failureLog,
+  t,
 }: {
   analysis: any;
   telemetry: any;
   failureLog: FailureLog;
+  t: any;
 }) => (
   <Document>
     <Page size="A4" style={pdfStyles.page}>
       {/* Header */}
       <View style={pdfStyles.header}>
         <View>
-          <Text style={pdfStyles.title}>SkySentinel Incident Report</Text>
-          <Text style={pdfStyles.subtitle}>Automated Forensics Analysis</Text>
+          <Text style={pdfStyles.title}>{t("aiAnalyzeModal.report.title")}</Text>
+          <Text style={pdfStyles.subtitle}>{t("aiAnalyzeModal.report.subtitle")}</Text>
         </View>
         <View style={{ alignItems: "flex-end" }}>
           <Text style={pdfStyles.value}>
             {new Date(failureLog.timestamp).toLocaleString()}
           </Text>
-          <Text style={pdfStyles.label}>Incident ID: {failureLog.id.slice(0, 8)}</Text>
+          <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.incidentId")}: {failureLog.id.slice(0, 8)}</Text>
         </View>
       </View>
 
       {/* Overview */}
       <View style={pdfStyles.section}>
-        <Text style={pdfStyles.sectionTitle}>Incident Overview</Text>
+        <Text style={pdfStyles.sectionTitle}>{t("aiAnalyzeModal.report.overview")}</Text>
         <View style={pdfStyles.row}>
-          <Text style={pdfStyles.label}>Description:</Text>
+          <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.description")}:</Text>
           <Text style={pdfStyles.value}>{failureLog.description}</Text>
         </View>
         <View style={pdfStyles.row}>
-          <Text style={pdfStyles.label}>Severity:</Text>
+          <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.severity")}:</Text>
           <Text
             style={[
               pdfStyles.value,
@@ -191,14 +193,14 @@ const AiFailureReport = ({
 
       {/* AI Analysis */}
       <View style={pdfStyles.section}>
-        <Text style={pdfStyles.sectionTitle}>AI Diagnostic Analysis</Text>
+        <Text style={pdfStyles.sectionTitle}>{t("aiAnalyzeModal.report.aiDiagnostic")}</Text>
         <View style={pdfStyles.criticalBox}>
-          <Text style={pdfStyles.rootCauseText}>Root Cause: {analysis.root_cause}</Text>
+          <Text style={pdfStyles.rootCauseText}>{t("aiAnalyzeModal.status.rootCause")}: {analysis.root_cause}</Text>
           <Text style={pdfStyles.bodyText}>{analysis.explanation}</Text>
         </View>
         
         <Text style={[pdfStyles.sectionTitle, { borderBottomWidth: 0, marginBottom: 5 }]}>
-          Suggested Remediation
+          {t("aiAnalyzeModal.report.suggestedRemediation")}
         </Text>
         <View style={pdfStyles.warningBox}>
           <Text style={pdfStyles.bodyText}>{analysis.suggested_action}</Text>
@@ -207,30 +209,30 @@ const AiFailureReport = ({
 
       {/* Telemetry Snapshot */}
       <View style={pdfStyles.section}>
-        <Text style={pdfStyles.sectionTitle}>Telemetry Evidence (at T-0)</Text>
+        <Text style={pdfStyles.sectionTitle}>{t("aiAnalyzeModal.report.telemetryEvidence")}</Text>
         <View style={pdfStyles.telemetryGrid}>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>Pitch</Text>
+            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.panels.evidence.pitch")}</Text>
             <Text style={pdfStyles.value}>{telemetry.pitch.toFixed(2)}°</Text>
           </View>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>Roll</Text>
+            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.panels.evidence.roll")}</Text>
             <Text style={pdfStyles.value}>{telemetry.roll.toFixed(2)}°</Text>
           </View>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>Throttle</Text>
+            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.panels.evidence.throttle")}</Text>
             <Text style={pdfStyles.value}>{(telemetry.throttle * 100).toFixed(0)}%</Text>
           </View>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>Vertical Speed</Text>
+            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.verticalSpeed")}</Text>
             <Text style={pdfStyles.value}>{telemetry.verticalSpeed.toFixed(2)} m/s</Text>
           </View>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>Airspeed</Text>
+            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.airspeed")}</Text>
             <Text style={pdfStyles.value}>{telemetry.airspeed.toFixed(2)} m/s</Text>
           </View>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>Altitude</Text>
+            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.altitude")}</Text>
             <Text style={pdfStyles.value}>{telemetry.altitude.toFixed(1)} m</Text>
           </View>
         </View>
@@ -238,8 +240,8 @@ const AiFailureReport = ({
 
       {/* Footer */}
       <View style={pdfStyles.footer}>
-        <Text>SkySentinel OS v1.0.4 - Confidential Technical Report</Text>
-        <Text>Page 1 of 1</Text>
+        <Text>{t("aiAnalyzeModal.report.confidential")}</Text>
+        <Text>{t("aiAnalyzeModal.report.page")} 1 of 1</Text>
       </View>
     </Page>
   </Document>
@@ -251,7 +253,7 @@ export function AiAnalyzeModal({
   onOpenChange,
 }: AiAnalyzeModalProps) {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const { data, isLoading, error } = useQuery({
     queryKey: ["ai-analyze", failureLog.id],
     queryFn: async () => {
@@ -267,7 +269,7 @@ export function AiAnalyzeModal({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch AI analysis");
+        throw new Error(t("aiAnalyzeModal.status.failed"));
       }
 
       return response.json();
@@ -282,7 +284,7 @@ export function AiAnalyzeModal({
         className="sm:max-w-4xl p-0 gap-0 max-h-screen overflow-y-auto bg-slate-950/90 backdrop-blur-xl border-slate-800 shadow-2xl rounded-xl"
       >
         <DialogTitle className="sr-only">
-          Incident Forensics Analysis
+          {t("aiAnalyzeModal.title")}
         </DialogTitle>
 
         <div className="p-6 flex flex-col">
@@ -290,14 +292,14 @@ export function AiAnalyzeModal({
             <div className="flex-1 flex flex-col items-center justify-center gap-4 text-slate-400">
               <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
               <p className=" text-sm tracking-widest uppercase animate-pulse">
-                Analyzing Telemetry...
+                {t("aiAnalyzeModal.status.analyzing")}
               </p>
             </div>
           ) : error ? (
             <div className="flex-1 flex flex-col items-center justify-center gap-4 text-rose-500">
               <AlertCircle className="w-12 h-12" />
               <p className=" text-sm tracking-widest uppercase">
-                Analysis Failed: {(error as Error).message}
+                {t("aiAnalyzeModal.status.failed")}: {(error as Error).message}
               </p>
             </div>
           ) : (
@@ -337,16 +339,17 @@ export function AiAnalyzeModal({
                     analysis={data.analysis}
                     telemetry={data.telemetry}
                     failureLog={failureLog}
+                    t={t}
                   />
                 }
                 fileName={`Incident_Report_${failureLog.id.slice(0, 8)}.pdf`}
               >
                 {({ loading }) =>
-                  loading ? "Preparing document..." : "Download PDF Report"
+                  loading ? t("aiAnalyzeModal.actions.preparingPdf") : t("aiAnalyzeModal.actions.downloadPdf")
                 }
               </PDFDownloadLink>
             ) : (
-              <span>Download PDF Report</span>
+              <span>{t("aiAnalyzeModal.actions.downloadPdf")}</span>
             )}
           </Button>
 
@@ -357,13 +360,13 @@ export function AiAnalyzeModal({
               className="bg-red-600 hover:bg-red-700 text-white shadow-[0_0_15px_rgba(220,38,38,0.4)] transition-all hover:shadow-[0_0_20px_rgba(220,38,38,0.6)]"
             >
               <AlertCircle className="w-4 h-4 mr-2" />
-              Execute Failsafe (RTL)
+              {t("aiAnalyzeModal.actions.executeFailsafe")}
             </Button>
 
             <DialogClose asChild>
               <Button className="bg-slate-100 text-slate-900 hover:bg-white transition-colors">
                 <X className="w-4 h-4 mr-2" />
-                Acknowledge & Close
+                {t("aiAnalyzeModal.actions.acknowledgeClose")}
               </Button>
             </DialogClose>
           </div>

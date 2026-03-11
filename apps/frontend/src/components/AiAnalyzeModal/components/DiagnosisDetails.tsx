@@ -1,14 +1,17 @@
 import { ArrowDown, ArrowLeft, ArrowUp, ArrowDownRight } from "lucide-react";
 import type { UAVdata } from "@sky-sentinel/typescript/types";
+import { useTranslation } from "react-i18next";
 
 interface DiagnosisDetailsProps {
   uavData: UAVdata;
 }
 
 export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col space-y-3">
-      <h3 className="text-sm font-medium text-slate-300">The Evidence</h3>
+      <h3 className="text-sm font-medium text-slate-300">{t("aiAnalyzeModal.panels.evidence.title")}</h3>
 
       {/* Black-box terminal container */}
       <div className="relative bg-[#0a0a0a] border border-slate-800 rounded-lg p-4 overflow-hidden group">
@@ -16,7 +19,7 @@ export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
         <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(transparent_50%,rgba(255,255,255,1)_50%)] bg-size-[100%_4px] z-10" />
 
         <h4 className="text-xs text-slate-400 mb-4 tracking-wider uppercase">
-          Telemetry Snapshot
+          {t("aiAnalyzeModal.panels.evidence.snapshot")}
         </h4>
 
         <div className="space-y-3  text-sm relative z-20">
@@ -24,7 +27,7 @@ export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
           <div className="flex items-center justify-between bg-slate-900/50 p-2 rounded border border-slate-800/50 hover:bg-slate-800/50 transition-colors">
             <div className="flex items-center gap-2 text-slate-300">
               <ArrowDown className="w-4 h-4 text-slate-500" />
-              <span>Pitch:</span>
+              <span>{t("aiAnalyzeModal.panels.evidence.pitch")}:</span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-slate-100">{uavData.pitch.toFixed(1)}°</span>
@@ -38,7 +41,7 @@ export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
           <div className="flex items-center justify-between bg-slate-900/50 p-2 rounded border border-slate-800/50 hover:bg-slate-800/50 transition-colors">
             <div className="flex items-center gap-2 text-slate-300">
               <ArrowLeft className="w-4 h-4 text-slate-500" />
-              <span>Roll:</span>
+              <span>{t("aiAnalyzeModal.panels.evidence.roll")}:</span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-slate-100">{uavData.roll.toFixed(1)}°</span>
@@ -52,7 +55,7 @@ export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
           <div className="flex items-center justify-between bg-slate-900/50 p-2 rounded border border-slate-800/50 hover:bg-slate-800/50 transition-colors">
             <div className="flex items-center gap-2 text-slate-300">
               <ArrowUp className="w-4 h-4 text-slate-500" />
-              <span>Throttle:</span>
+              <span>{t("aiAnalyzeModal.panels.evidence.throttle")}:</span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-slate-100">{(uavData.throttle * 100).toFixed(0)}%</span>
@@ -66,7 +69,7 @@ export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
           <div className="flex items-center justify-between bg-slate-900/50 p-2 rounded border border-slate-800/50 hover:bg-slate-800/50 transition-colors">
             <div className="flex items-center gap-2 text-slate-300">
               <ArrowDown className="w-4 h-4 text-slate-500" />
-              <span>VSI:</span>
+              <span>{t("aiAnalyzeModal.panels.evidence.vsi")}:</span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-slate-100">{uavData.verticalSpeed.toFixed(1)} m/s</span>

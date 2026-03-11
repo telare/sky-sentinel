@@ -11,25 +11,45 @@ from datetime import datetime, timezone
 BACKEND_URL = 'http://localhost:3003'
 
 # --- THEME CONSTANTS ---
-COLORS = {
-    "bg_main": "#111827",
-    "bg_panel": "#1f2937",
-    "accent_primary": "#06b6d4",
-    "accent_success": "#10b981",
-    "accent_warning": "#f59e0b",
-    "accent_danger": "#ef4444",
-    "text_main": "#f3f4f6",
-    "text_dim": "#9ca3af",
-    "terminal_bg": "#000000",
-    "terminal_text": "#22d3ee"
+THEMES = {
+    "DARK": {
+        "bg_main": "#000000",      # Pure Black
+        "bg_panel": "#0a0a0a",     # Zinc 950 / Near black
+        "border": "#27272a",       # Zinc 800
+        "accent_primary": "#10b981", # Emerald 500
+        "accent_success": "#10b981", # Emerald 500
+        "accent_warning": "#f59e0b", # Amber 500
+        "accent_danger": "#ef4444",  # Red 500
+        "text_main": "#ffffff",      # White
+        "text_dim": "#a1a1aa",       # Zinc 400
+        "terminal_bg": "#000000",
+        "terminal_text": "#10b981",
+        "btn_bg": "#18181b",       # Zinc 900
+        "btn_fg": "#ffffff"
+    },
+    "LIGHT": {
+        "bg_main": "#ffffff",      # Pure White
+        "bg_panel": "#f4f4f5",     # Zinc 100
+        "border": "#e4e4e7",       # Zinc 200
+        "accent_primary": "#059669", # Emerald 600
+        "accent_success": "#059669", # Emerald 600
+        "accent_warning": "#d97706", # Amber 600
+        "accent_danger": "#dc2626",  # Red 600
+        "text_main": "#09090b",      # Zinc 950
+        "text_dim": "#52525b",       # Zinc 600
+        "terminal_bg": "#f4f4f5",
+        "terminal_text": "#064e3b",  # Emerald 900
+        "btn_bg": "#e4e4e7",       # Zinc 200
+        "btn_fg": "#09090b"
+    }
 }
 
 FONTS = {
-    "header": ("Segoe UI", 16, "bold"),
-    "sub_header": ("Segoe UI", 10, "bold"),
-    "body": ("Segoe UI", 10),
+    "header": ("Consolas", 18, "bold"),
+    "sub_header": ("Consolas", 10, "bold"),
+    "body": ("Consolas", 10),
     "mono": ("Consolas", 10),
-    "data_label": ("Segoe UI", 9),
+    "data_label": ("Consolas", 9),
     "data_value": ("Consolas", 12, "bold")
 }
 
@@ -44,6 +64,7 @@ TEXTS = {
         "offline": "● OFFLINE",
         "live": "● LIVE",
         "lang_toggle": "🇺🇦 UA",
+        "theme_toggle": "🌓 THEME",
         "failures": ["NORMAL", "PITOT CLOG", "ENGINE FAIL", "SERVO STALL"],
         "routes_btn": ["City Patrol", "Highway E40", "Border Sweep", "Return Base"],
         "metrics": ["ALTITUDE (m)", "AIRSPEED (km/h)", "LATITUDE", "LONGITUDE", 
@@ -61,6 +82,7 @@ TEXTS = {
         "offline": "● ОФЛАЙН",
         "live": "● В ЕФІРІ",
         "lang_toggle": "🇺🇸 EN",
+        "theme_toggle": "🌓 ТЕМА",
         "failures": ["НОРМА", "ВІДМОВА ПВД", "ВІДМОВА ДВИГУНА", "ЗАКЛИНЮВАННЯ"],
         "routes_btn": ["Патруль міста", "Траса E40", "Обліт кордону", "На базу"],
         "metrics": ["ВИСОТА (м)", "ШВИД. (км/год)", "ШИРОТА", "ДОВГОТА", 
@@ -75,13 +97,16 @@ class UavSimulatorGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("SkySentinel | Operator Console")
-        self.root.geometry("700x850")
-        self.root.configure(bg=COLORS["bg_main"])
+        self.root.geometry("750x900")
         
         self.sio = socketio.Client(handle_sigint=False)
         self.running = False
         self.failure_mode = "NORMAL"
         self.lang = "EN" # Default Language
+        self.theme = "DARK"
+        self.colors = THEMES[self.theme]
+        
+        self.root.configure(bg=self.colors["bg_main"])
         
         self.state = {
             "latitude": 50.4501, "longitude": 30.5234, "altitude": 150.0,
@@ -96,12 +121,14 @@ class UavSimulatorGUI:
         self.tick = 0.0
         self.current_route = "BASE"
         
-        # UI Element References for dynamic translation
+        # UI Element References for dynamic translation and theme
         self.telemetry_labels = {} 
         self.ui_refs = {
             "fail_btns": [],
             "route_btns": [],
-            "metric_labels": []
+            "metric_labels": [],
+            "metric_frames": [],
+            "frames": []
         }
         
         self.setup_ui()
@@ -109,45 +136,55 @@ class UavSimulatorGUI:
 
     def setup_ui(self):
         t = TEXTS[self.lang]
+        c = self.colors
 
         # --- HEADER ---
-        header_frame = tk.Frame(self.root, bg=COLORS["bg_main"])
-        header_frame.pack(fill="x", padx=20, pady=(20, 10))
+        self.header_frame = tk.Frame(self.root, bg=c["bg_main"])
+        self.header_frame.pack(fill="x", padx=20, pady=(20, 10))
         
-        tk.Label(header_frame, text="SKYSENTINEL", font=("Segoe UI", 22, "bold"), 
-                 fg=COLORS["accent_primary"], bg=COLORS["bg_main"]).pack(side="left")
+        self.title_lbl = tk.Label(self.header_frame, text="SKYSENTINEL", font=FONTS["header"], 
+                 fg=c["accent_primary"], bg=c["bg_main"])
+        self.title_lbl.pack(side="left")
         
-        self.status_indicator = tk.Label(header_frame, text=t["offline"], font=FONTS["sub_header"],
-                                         fg=COLORS["text_dim"], bg=COLORS["bg_main"])
+        self.status_indicator = tk.Label(self.header_frame, text=t["offline"], font=FONTS["sub_header"],
+                                         fg=c["text_dim"], bg=c["bg_main"])
         self.status_indicator.pack(side="right", anchor="center")
 
-        self.lang_btn = tk.Button(header_frame, text=t["lang_toggle"], font=FONTS["sub_header"],
-                                  bg=COLORS["bg_panel"], fg=COLORS["text_main"],
-                                  activebackground=COLORS["accent_primary"],
-                                  relief="flat", cursor="hand2", command=self.toggle_language)
-        self.lang_btn.pack(side="right", padx=(10, 10))
+        self.theme_btn = tk.Button(self.header_frame, text=t["theme_toggle"], font=FONTS["sub_header"],
+                                  bg=c["btn_bg"], fg=c["btn_fg"],
+                                  activebackground=c["accent_primary"],
+                                  relief="flat", cursor="hand2", command=self.toggle_theme)
+        self.theme_btn.pack(side="right", padx=(10, 0))
 
-        main_container = tk.Frame(self.root, bg=COLORS["bg_main"])
-        main_container.pack(fill="both", expand=True, padx=20)
+        self.lang_btn = tk.Button(self.header_frame, text=t["lang_toggle"], font=FONTS["sub_header"],
+                                  bg=c["btn_bg"], fg=c["btn_fg"],
+                                  activebackground=c["accent_primary"],
+                                  relief="flat", cursor="hand2", command=self.toggle_language)
+        self.lang_btn.pack(side="right", padx=(10, 0))
+
+        self.main_container = tk.Frame(self.root, bg=c["bg_main"])
+        self.main_container.pack(fill="both", expand=True, padx=20)
 
         # --- LEFT COLUMN ---
-        left_col = tk.Frame(main_container, bg=COLORS["bg_main"])
+        left_col = tk.Frame(self.main_container, bg=c["bg_main"])
         left_col.pack(side="left", fill="both", expand=True, padx=(0, 10))
+        self.ui_refs["frames"].append(left_col)
 
         # 1. Diagnostics
         self.fail_frame = tk.LabelFrame(left_col, text=t["diag"], font=FONTS["sub_header"],
-                                   bg=COLORS["bg_main"], fg=COLORS["text_dim"], bd=1, relief="solid")
+                                   bg=c["bg_main"], fg=c["text_dim"], bd=1, relief="solid")
         self.fail_frame.pack(fill="x", pady=10, ipady=5)
+        self.ui_refs["frames"].append(self.fail_frame)
 
         fail_modes = ["NORMAL", "PITOT", "ENGINE", "SERVO"]
         for i, mode in enumerate(fail_modes):
-            r, c = divmod(i, 2)
+            r, c_idx = divmod(i, 2)
             btn = tk.Button(self.fail_frame, text=t["failures"][i], font=FONTS["body"],
-                            bg=COLORS["bg_panel"], fg=COLORS["text_main"],
-                            activebackground=COLORS["accent_primary"],
+                            bg=c["bg_panel"], fg=c["text_main"],
+                            activebackground=c["accent_primary"],
                             relief="flat", borderwidth=0, cursor="hand2",
                             command=lambda m=mode: self.set_failure(m))
-            btn.grid(row=r, column=c, sticky="ew", padx=5, pady=5)
+            btn.grid(row=r, column=c_idx, sticky="ew", padx=5, pady=5)
             self.ui_refs["fail_btns"].append(btn)
             
         self.fail_frame.grid_columnconfigure(0, weight=1)
@@ -155,65 +192,106 @@ class UavSimulatorGUI:
 
         # --- FLIGHT ROUTES PANEL ---
         self.route_frame = tk.LabelFrame(left_col, text=t["routes"], font=FONTS["sub_header"],
-                                   bg=COLORS["bg_main"], fg=COLORS["text_dim"], bd=1, relief="solid")
+                                   bg=c["bg_main"], fg=c["text_dim"], bd=1, relief="solid")
         self.route_frame.pack(fill="x", pady=10, ipady=5)
+        self.ui_refs["frames"].append(self.route_frame)
 
         route_modes = ["CITY_ROAD", "HIGHWAY", "BORDER", "BASE"]
         for i, mode in enumerate(route_modes):
-            r, c = divmod(i, 2)
+            r, c_idx = divmod(i, 2)
             btn = tk.Button(self.route_frame, text=t["routes_btn"][i], font=FONTS["body"],
-                            bg=COLORS["bg_panel"], fg=COLORS["text_main"],
-                            activebackground=COLORS["accent_primary"],
+                            bg=c["bg_panel"], fg=c["text_main"],
+                            activebackground=c["accent_primary"],
                             relief="flat", borderwidth=0, cursor="hand2",
                             command=lambda m=mode: self.set_route(m))
-            btn.grid(row=r, column=c, sticky="ew", padx=5, pady=5)
+            btn.grid(row=r, column=c_idx, sticky="ew", padx=5, pady=5)
             self.ui_refs["route_btns"].append(btn)
             
         self.route_frame.grid_columnconfigure(0, weight=1)
         self.route_frame.grid_columnconfigure(1, weight=1)
 
         # 2. Connection Control
-        self.start_btn = tk.Button(left_col, text=t["start"], font=("Segoe UI", 12, "bold"),
-                                   bg="#2563eb", fg="white", activebackground="#1d4ed8",
+        self.start_btn = tk.Button(left_col, text=t["start"], font=FONTS["header"],
+                                   bg=c["accent_primary"], fg="white", activebackground=c["accent_primary"],
                                    relief="flat", height=2, command=self.start_sim)
         self.start_btn.pack(fill="x", pady=(20, 0))
 
         # --- RIGHT COLUMN ---
-        right_col = tk.Frame(main_container, bg=COLORS["bg_main"])
+        right_col = tk.Frame(self.main_container, bg=c["bg_main"])
         right_col.pack(side="right", fill="both", expand=True, padx=(10, 0))
+        self.ui_refs["frames"].append(right_col)
 
         self.tele_frame = tk.LabelFrame(right_col, text=t["tele"], font=FONTS["sub_header"],
-                                   bg=COLORS["bg_main"], fg=COLORS["text_dim"], bd=1, relief="solid")
+                                   bg=c["bg_main"], fg=c["text_dim"], bd=1, relief="solid")
         self.tele_frame.pack(fill="x", pady=10)
+        self.ui_refs["frames"].append(self.tele_frame)
 
         metric_keys = ["altitude", "airspeed", "latitude", "longitude", "battery_level", "throttle", "temperature", "rssi"]
         for i, key in enumerate(metric_keys):
-            r, c = divmod(i, 2)
-            cell = tk.Frame(self.tele_frame, bg=COLORS["bg_panel"], padx=10, pady=5)
-            cell.grid(row=r, column=c, sticky="ew", padx=2, pady=2)
+            r, c_idx = divmod(i, 2)
+            cell = tk.Frame(self.tele_frame, bg=c["bg_panel"], padx=10, pady=5)
+            cell.grid(row=r, column=c_idx, sticky="ew", padx=2, pady=2)
+            self.ui_refs["metric_frames"].append(cell)
             
-            lbl = tk.Label(cell, text=t["metrics"][i], font=FONTS["data_label"], fg=COLORS["text_dim"], bg=COLORS["bg_panel"])
+            lbl = tk.Label(cell, text=t["metrics"][i], font=FONTS["data_label"], fg=c["text_dim"], bg=c["bg_panel"])
             lbl.pack(anchor="w")
             self.ui_refs["metric_labels"].append(lbl)
             
-            val = tk.Label(cell, text="--", font=FONTS["data_value"], fg=COLORS["accent_primary"], bg=COLORS["bg_panel"])
+            val = tk.Label(cell, text="--", font=FONTS["data_value"], fg=c["accent_primary"], bg=c["bg_panel"])
             val.pack(anchor="e")
             self.telemetry_labels[key] = val
             
         self.tele_frame.grid_columnconfigure(0, weight=1)
         self.tele_frame.grid_columnconfigure(1, weight=1)
 
-        self.log_area = scrolledtext.ScrolledText(right_col, height=12, bg=COLORS["terminal_bg"], 
-                                                  fg=COLORS["terminal_text"], font=FONTS["mono"])
+        self.log_area = scrolledtext.ScrolledText(right_col, height=12, bg=c["terminal_bg"], 
+                                                  fg=c["terminal_text"], font=FONTS["mono"],
+                                                  insertbackground=c["terminal_text"])
         self.log_area.pack(fill="both", expand=True)
+
+    def toggle_theme(self):
+        """Switches between DARK and LIGHT themes."""
+        self.theme = "LIGHT" if self.theme == "DARK" else "DARK"
+        self.colors = THEMES[self.theme]
+        c = self.colors
+        t = TEXTS[self.lang]
+
+        self.root.configure(bg=c["bg_main"])
+        self.header_frame.config(bg=c["bg_main"])
+        self.main_container.config(bg=c["bg_main"])
+        self.title_lbl.config(bg=c["bg_main"], fg=c["accent_primary"])
+        self.status_indicator.config(bg=c["bg_main"], fg=c["accent_success"] if self.running else c["text_dim"])
+        self.theme_btn.config(bg=c["btn_bg"], fg=c["btn_fg"], text=t["theme_toggle"])
+        self.lang_btn.config(bg=c["btn_bg"], fg=c["btn_fg"])
+        
+        self.start_btn.config(bg=c["accent_danger"] if self.running else c["accent_primary"])
+        
+        for frame in self.ui_refs["frames"]:
+            frame.config(bg=c["bg_main"], fg=c["text_dim"] if isinstance(frame, tk.LabelFrame) else None)
+            
+        for btn in self.ui_refs["fail_btns"] + self.ui_refs["route_btns"]:
+            btn.config(bg=c["bg_panel"], fg=c["text_main"])
+            
+        for cell in self.ui_refs["metric_frames"]:
+            cell.config(bg=c["bg_panel"])
+            
+        for lbl in self.ui_refs["metric_labels"]:
+            lbl.config(bg=c["bg_panel"], fg=c["text_dim"])
+            
+        for val in self.telemetry_labels.values():
+            val.config(bg=c["bg_panel"], fg=c["accent_primary"])
+            
+        self.log_area.config(bg=c["terminal_bg"], fg=c["terminal_text"], insertbackground=c["terminal_text"])
 
     def toggle_language(self):
         """Swaps the language and updates all tracked UI elements instantly."""
         self.lang = "UA" if self.lang == "EN" else "EN"
         t = TEXTS[self.lang]
+        c = self.colors
         
         # Update standalone widgets
         self.lang_btn.config(text=t["lang_toggle"])
+        self.theme_btn.config(text=t["theme_toggle"])
         self.status_indicator.config(text=t["live"] if self.running else t["offline"])
         self.start_btn.config(text=t["stop"] if self.running else t["start"])
         self.fail_frame.config(text=t["diag"])
@@ -252,11 +330,11 @@ class UavSimulatorGUI:
                 "SERVO": "Апаратна відмова виконавчого механізму"
             }
         }
-        color = COLORS["accent_danger"] if mode != "NORMAL" else COLORS["accent_success"]
+        color = self.colors["accent_danger"] if mode != "NORMAL" else self.colors["accent_success"]
         self.log(f"CIUS_STATE >> {descriptions[self.lang].get(mode, mode)}", color)
 
     def set_route(self, route):
-        self.log(f"ROUTE_CMD >> {TEXTS[self.lang]['log_route']} {route}", COLORS["accent_primary"])
+        self.log(f"ROUTE_CMD >> {TEXTS[self.lang]['log_route']} {route}", self.colors["accent_primary"])
         self.current_route = route
         
         if route == "CITY_ROAD":
@@ -358,7 +436,7 @@ class UavSimulatorGUI:
                 self.sio.emit('telemetry', packet)
                 self.root.after(0, self.update_telemetry_ui)
             except Exception as e:
-                self.root.after(0, lambda: self.log(f"Emit Error: {e}", COLORS["accent_danger"]))
+                self.root.after(0, lambda: self.log(f"Emit Error: {e}", self.colors["accent_danger"]))
 
             time.sleep(0.8)
 
@@ -386,17 +464,17 @@ class UavSimulatorGUI:
             try:
                 self.sio.connect(BACKEND_URL)
                 self.running = True
-                self.start_btn.config(text=TEXTS[self.lang]["stop"], bg=COLORS["accent_danger"])
-                self.status_indicator.config(text=TEXTS[self.lang]["live"], fg=COLORS["accent_success"])
+                self.start_btn.config(text=TEXTS[self.lang]["stop"], bg=self.colors["accent_danger"])
+                self.status_indicator.config(text=TEXTS[self.lang]["live"], fg=self.colors["accent_success"])
                 threading.Thread(target=self.sim_loop, daemon=True).start()
-                self.log(TEXTS[self.lang]["log_start"], COLORS["accent_success"])
+                self.log(TEXTS[self.lang]["log_start"], self.colors["accent_success"])
             except Exception as e:
-                self.log(f"Failed: {e}", COLORS["accent_danger"])
+                self.log(f"Failed: {e}", self.colors["accent_danger"])
         else:
             self.running = False
             self.sio.disconnect()
-            self.start_btn.config(text=TEXTS[self.lang]["start"], bg="#2563eb")
-            self.status_indicator.config(text=TEXTS[self.lang]["offline"], fg=COLORS["text_dim"])
+            self.start_btn.config(text=TEXTS[self.lang]["start"], bg=self.colors["accent_primary"])
+            self.status_indicator.config(text=TEXTS[self.lang]["offline"], fg=self.colors["text_dim"])
             self.log(TEXTS[self.lang]["log_stop"])
 
 if __name__ == "__main__":

@@ -3,5 +3,6 @@
 
 7) fix ssr
 9) deploy
-10) add sorting in logs in the right panel 
+10) add sorting in logs in the right panel C
 11) add notificaiton for new failures connections etc
+12) add ua pdf
