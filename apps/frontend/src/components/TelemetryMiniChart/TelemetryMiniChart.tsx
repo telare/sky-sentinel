@@ -19,9 +19,11 @@ import { useTranslation } from "react-i18next";
 export function TelemetryMiniChart({
   title,
   data,
+  color = "#2dd4bf",
 }: {
   title: string;
   data: { x: number; y: number }[] | undefined;
+  color?: string;
 }) {
   const { t, i18n } = useTranslation();
 
@@ -33,6 +35,8 @@ export function TelemetryMiniChart({
       second: "2-digit",
     });
   };
+
+  const gradientId = `color-${title.replace(/\s+/g, "-").toLowerCase()}`;
 
   return (
     <Card className="border-slate-800 bg-slate-950/50 backdrop-blur-md">
@@ -53,9 +57,9 @@ export function TelemetryMiniChart({
               margin={{ top: 5, right: 15, left: -20, bottom: 0 }}
             >
               <defs>
-                <linearGradient id="colorAlt" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#2dd4bf" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#2dd4bf" stopOpacity={0} />
+                <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={color} stopOpacity={0.3} />
+                  <stop offset="95%" stopColor={color} stopOpacity={0} />
                 </linearGradient>
               </defs>
 
@@ -107,10 +111,10 @@ export function TelemetryMiniChart({
               <Area
                 type="monotone"
                 dataKey="y"
-                stroke="#2dd4bf"
+                stroke={color}
                 strokeWidth={2}
                 fillOpacity={1}
-                fill="url(#colorAlt)"
+                fill={`url(#${gradientId})`}
                 isAnimationActive={true}
                 animationDuration={1500}
               />

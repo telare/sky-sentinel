@@ -56,7 +56,7 @@ export function EventDiagnosticLog() {
 
                   {/* Text Content */}
                   <div className="flex flex-col flex-1 gap-0.5">
-                    <div className="flex items-center gap-2 text-[11px] font-mono text-muted-foreground">
+                    <div className="flex items-center gap-2 text-[11px]  text-muted-foreground">
                       <span>
                         {new Date(entry.timestamp).toLocaleString(
                           i18n.language === "ua" ? "uk-UA" : "en-US",
@@ -86,7 +86,10 @@ export function EventDiagnosticLog() {
                   {/* Action Icon */}
                   <div
                     className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors"
-                    onClick={() => setSelectedFailure(entry)}
+                    onClick={() => {
+                      setIsOpen(true);
+                      setSelectedFailure(entry);
+                    }}
                   >
                     <FileText size={16} />
                   </div>

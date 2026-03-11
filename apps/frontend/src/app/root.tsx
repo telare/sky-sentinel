@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  Link,
 } from "react-router";
 
 import "./app.css";
@@ -19,6 +20,8 @@ import { Suspense, useEffect, useState } from "react";
 import { CookiesProvider } from "react-cookie";
 import { getLocale, initI18nServer } from "../i18n.server";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AlertTriangle, Home, RefreshCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -111,14 +114,79 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto flex flex-col justify-center items-center font-mono">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
+    <main className="min-h-screen w-full flex items-center justify-center p-4 bg-background transition-colors duration-500 font-mono">
+      {/* Background decoration - uses theme primary/destructive colors */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-destructive/5 blur-[120px] rounded-full" />
+        <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full" />
+      </div>
+
+      <div className="relative w-full max-w-2xl border border-border bg-card/80 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-500">
+        {/* Header - Master Caution Style using destructive theme color */}
+        <div className="bg-destructive/10 border-b border-border p-6 flex items-center gap-4">
+          <div className="p-3 bg-destructive/20 rounded-xl text-destructive animate-pulse shadow-[0_0_15px_rgba(var(--destructive),0.2)]">
+            <AlertTriangle className="size-8" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground uppercase">
+              {message}
+            </h1>
+            <p className="text-muted-foreground  text-[10px] mt-1 uppercase tracking-widest opacity-70">
+              Critical System Failure // Master Caution
+            </p>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-8 space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-xl font-semibold text-foreground">
+              {t("errors.diagnostic_report")}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed">
+              {details}
+            </p>
+          </div>
+
+          {stack && (
+            <div className="group relative">
+              <div className="absolute -inset-1 bg-linear-to-r from-destructive/10 to-transparent blur opacity-25 transition duration-1000"></div>
+              <div className="relative bg-muted/30 border border-border p-4 rounded-lg overflow-hidden ">
+                <pre className="text-[10px] md:text-xs text-muted-foreground/80 overflow-x-auto max-h-50 scrollbar-thin scrollbar-thumb-muted-foreground/20">
+                  <code>{stack}</code>
+                </pre>
+              </div>
+            </div>
+          )}
+
+          {/* Actions - using theme buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
+            <Button
+              asChild
+              variant="default"
+              className="flex-1 h-12 text-base font-semibold cursor-pointer"
+            >
+              <Link to="/">
+                <Home className="mr-2 size-5" />
+                {t("errors.returnToBase")}
+              </Link>
+            </Button>
+            <Button
+              variant="outline"
+              className="flex-1 h-12 text-base font-semibold cursor-pointer"
+              onClick={() => window.location.reload()}
+            >
+              <RefreshCcw className="mr-2 size-5" />
+              {t("errors.resetSystems")}
+            </Button>
+          </div>
+        </div>
+
+        {/* Footer - using muted theme color */}
+        <div className="bg-muted/50 px-8 py-4 flex justify-between items-center text-[10px]  text-muted-foreground/60 uppercase tracking-tighter">
+          <span>SkySentinel OS stable</span>
+        </div>
+      </div>
     </main>
   );
 }

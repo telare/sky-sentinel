@@ -57,7 +57,7 @@ export default function StatusBarItem({
         )}
         <span
           className={cn(
-            "font-bold uppercase tracking-widest leading-none font-mono",
+            "font-bold uppercase tracking-widest leading-none ",
             label ? "text-[0.75rem]" : "text-[0.85rem]",
             // Ensure Master Caution text is readable during alerts
             variant === "critical" && "text-destructive",

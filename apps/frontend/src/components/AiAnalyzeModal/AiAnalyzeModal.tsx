@@ -15,12 +15,235 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import type { FailureLog } from "@prisma/client";
 import { useTranslation } from "react-i18next";
-
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFDownloadLink,
+} from "@react-pdf/renderer";
 interface AiAnalyzeModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   failureLog: FailureLog;
 }
+
+const pdfStyles = StyleSheet.create({
+  page: {
+    padding: 40,
+    fontFamily: "Helvetica",
+    backgroundColor: "#ffffff",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomWidth: 2,
+    borderBottomColor: "#1e293b",
+    paddingBottom: 10,
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#0f172a",
+  },
+  subtitle: {
+    fontSize: 10,
+    color: "#64748b",
+    marginTop: 2,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+  },
+  section: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#475569",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e2e8f0",
+    paddingBottom: 4,
+  },
+  row: {
+    flexDirection: "row",
+    marginBottom: 5,
+  },
+  label: {
+    fontSize: 10,
+    color: "#64748b",
+    width: 100,
+  },
+  value: {
+    fontSize: 10,
+    color: "#1e293b",
+    fontWeight: "bold",
+  },
+  highlightBox: {
+    backgroundColor: "#f8fafc",
+    padding: 12,
+    borderRadius: 4,
+    borderLeftWidth: 3,
+    borderLeftColor: "#3b82f6",
+  },
+  criticalBox: {
+    backgroundColor: "#fff1f2",
+    padding: 12,
+    borderRadius: 4,
+    borderLeftWidth: 3,
+    borderLeftColor: "#e11d48",
+    marginBottom: 15,
+  },
+  warningBox: {
+    backgroundColor: "#fffbeb",
+    padding: 12,
+    borderRadius: 4,
+    borderLeftWidth: 3,
+    borderLeftColor: "#d97706",
+  },
+  rootCauseText: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#e11d48",
+    marginBottom: 5,
+  },
+  bodyText: {
+    fontSize: 10,
+    color: "#334155",
+    lineHeight: 1.5,
+  },
+  telemetryGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+  },
+  telemetryItem: {
+    width: "48%",
+    backgroundColor: "#f1f5f9",
+    padding: 8,
+    borderRadius: 4,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  footer: {
+    position: "absolute",
+    bottom: 30,
+    left: 40,
+    right: 40,
+    borderTopWidth: 1,
+    borderTopColor: "#e2e8f0",
+    paddingTop: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    fontSize: 8,
+    color: "#94a3b8",
+  },
+});
+
+const AiFailureReport = ({
+  analysis,
+  telemetry,
+  failureLog,
+}: {
+  analysis: any;
+  telemetry: any;
+  failureLog: FailureLog;
+}) => (
+  <Document>
+    <Page size="A4" style={pdfStyles.page}>
+      {/* Header */}
+      <View style={pdfStyles.header}>
+        <View>
+          <Text style={pdfStyles.title}>SkySentinel Incident Report</Text>
+          <Text style={pdfStyles.subtitle}>Automated Forensics Analysis</Text>
+        </View>
+        <View style={{ alignItems: "flex-end" }}>
+          <Text style={pdfStyles.value}>
+            {new Date(failureLog.timestamp).toLocaleString()}
+          </Text>
+          <Text style={pdfStyles.label}>Incident ID: {failureLog.id.slice(0, 8)}</Text>
+        </View>
+      </View>
+
+      {/* Overview */}
+      <View style={pdfStyles.section}>
+        <Text style={pdfStyles.sectionTitle}>Incident Overview</Text>
+        <View style={pdfStyles.row}>
+          <Text style={pdfStyles.label}>Description:</Text>
+          <Text style={pdfStyles.value}>{failureLog.description}</Text>
+        </View>
+        <View style={pdfStyles.row}>
+          <Text style={pdfStyles.label}>Severity:</Text>
+          <Text
+            style={[
+              pdfStyles.value,
+              { color: analysis.severity === "CRITICAL" ? "#e11d48" : "#d97706" },
+            ]}
+          >
+            {analysis.severity}
+          </Text>
+        </View>
+      </View>
+
+      {/* AI Analysis */}
+      <View style={pdfStyles.section}>
+        <Text style={pdfStyles.sectionTitle}>AI Diagnostic Analysis</Text>
+        <View style={pdfStyles.criticalBox}>
+          <Text style={pdfStyles.rootCauseText}>Root Cause: {analysis.root_cause}</Text>
+          <Text style={pdfStyles.bodyText}>{analysis.explanation}</Text>
+        </View>
+        
+        <Text style={[pdfStyles.sectionTitle, { borderBottomWidth: 0, marginBottom: 5 }]}>
+          Suggested Remediation
+        </Text>
+        <View style={pdfStyles.warningBox}>
+          <Text style={pdfStyles.bodyText}>{analysis.suggested_action}</Text>
+        </View>
+      </View>
+
+      {/* Telemetry Snapshot */}
+      <View style={pdfStyles.section}>
+        <Text style={pdfStyles.sectionTitle}>Telemetry Evidence (at T-0)</Text>
+        <View style={pdfStyles.telemetryGrid}>
+          <View style={pdfStyles.telemetryItem}>
+            <Text style={pdfStyles.label}>Pitch</Text>
+            <Text style={pdfStyles.value}>{telemetry.pitch.toFixed(2)}°</Text>
+          </View>
+          <View style={pdfStyles.telemetryItem}>
+            <Text style={pdfStyles.label}>Roll</Text>
+            <Text style={pdfStyles.value}>{telemetry.roll.toFixed(2)}°</Text>
+          </View>
+          <View style={pdfStyles.telemetryItem}>
+            <Text style={pdfStyles.label}>Throttle</Text>
+            <Text style={pdfStyles.value}>{(telemetry.throttle * 100).toFixed(0)}%</Text>
+          </View>
+          <View style={pdfStyles.telemetryItem}>
+            <Text style={pdfStyles.label}>Vertical Speed</Text>
+            <Text style={pdfStyles.value}>{telemetry.verticalSpeed.toFixed(2)} m/s</Text>
+          </View>
+          <View style={pdfStyles.telemetryItem}>
+            <Text style={pdfStyles.label}>Airspeed</Text>
+            <Text style={pdfStyles.value}>{telemetry.airspeed.toFixed(2)} m/s</Text>
+          </View>
+          <View style={pdfStyles.telemetryItem}>
+            <Text style={pdfStyles.label}>Altitude</Text>
+            <Text style={pdfStyles.value}>{telemetry.altitude.toFixed(1)} m</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Footer */}
+      <View style={pdfStyles.footer}>
+        <Text>SkySentinel OS v1.0.4 - Confidential Technical Report</Text>
+        <Text>Page 1 of 1</Text>
+      </View>
+    </Page>
+  </Document>
+);
 
 export function AiAnalyzeModal({
   open,
@@ -66,14 +289,14 @@ export function AiAnalyzeModal({
           {isLoading ? (
             <div className="flex-1 flex flex-col items-center justify-center gap-4 text-slate-400">
               <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
-              <p className="font-mono text-sm tracking-widest uppercase animate-pulse">
+              <p className=" text-sm tracking-widest uppercase animate-pulse">
                 Analyzing Telemetry...
               </p>
             </div>
           ) : error ? (
             <div className="flex-1 flex flex-col items-center justify-center gap-4 text-rose-500">
               <AlertCircle className="w-12 h-12" />
-              <p className="font-mono text-sm tracking-widest uppercase">
+              <p className=" text-sm tracking-widest uppercase">
                 Analysis Failed: {(error as Error).message}
               </p>
             </div>
@@ -103,11 +326,28 @@ export function AiAnalyzeModal({
         <div className="border-t border-slate-800 bg-slate-950/50 gap-4 p-4 px-6 flex flex-wrap items-center justify-center">
           <Button
             variant="outline"
-            disabled={isLoading || !!error}
+            disabled={isLoading || !!error || !data}
             className="border-slate-700 text-slate-300 hover:text-slate-100 hover:bg-slate-800"
           >
             <Download className="w-4 h-4 mr-2" />
-            Download PDF Report
+            {data ? (
+              <PDFDownloadLink
+                document={
+                  <AiFailureReport
+                    analysis={data.analysis}
+                    telemetry={data.telemetry}
+                    failureLog={failureLog}
+                  />
+                }
+                fileName={`Incident_Report_${failureLog.id.slice(0, 8)}.pdf`}
+              >
+                {({ loading }) =>
+                  loading ? "Preparing document..." : "Download PDF Report"
+                }
+              </PDFDownloadLink>
+            ) : (
+              <span>Download PDF Report</span>
+            )}
           </Button>
 
           <div className="flex flex-wrap justify-center items-center gap-3">

@@ -13,7 +13,7 @@ export function AiStatusHeader({ severity, timestamp }: AiStatusHeaderProps) {
   return (
     <div className="flex flex-wrap items-start justify-between mb-6 gap-3">
       <div className="space-y-2">
-        <h2 className="text-xl font-mono font-bold tracking-wider text-slate-100 uppercase flex items-center gap-2">
+        <h2 className="text-xl  font-bold tracking-wider text-slate-100 uppercase flex items-center gap-2">
           INCIDENT FORENSICS
         </h2>
         <div className="flex items-center gap-2">
@@ -30,7 +30,7 @@ export function AiStatusHeader({ severity, timestamp }: AiStatusHeaderProps) {
       <div className="flex items-center gap-4 justify-between">
         <Badge
           variant={severity === "CRITICAL" ? "destructive" : "outline"}
-          className={`px-3 py-1 font-mono tracking-widest rounded-md ${
+          className={`px-3 py-1  tracking-widest rounded-md ${
             severity === "CRITICAL"
               ? "bg-red-950/40 text-red-500 border border-red-800 shadow-[0_0_15px_rgba(220,38,38,0.3)]"
               : "bg-slate-900/40 text-slate-400 border border-slate-800"

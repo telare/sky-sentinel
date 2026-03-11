@@ -29,6 +29,16 @@
     "title": "Графіки телеметрії",
     "altitudeHistory": "Історія висоти (м)",
     "batteryLevelHistory": "Історія рівня заряду батареї (%)",
+    "verticalSpeedHistory": "Вертикальна швидкість (м/с)",
+    "airspeedHistory": "Приладова швидкість (м/с)",
+    "groundSpeedHistory": "Шляхова швидкість (м/с)",
+    "pitchHistory": "Тангаж (°)",
+    "rollHistory": "Крен (°)",
+    "throttleHistory": "Положення РУД (%)",
+    "temperatureHistory": "Температура (°C)",
+    "rssiHistory": "Рівень сигналу (RSSI)",
+    "latencyHistory": "Затримка каналу (мс)",
+    "servoCurrentHistory": "Струм сервоприводів (А)",
     "noData": "Дані відсутні"
   },
   "missionMap": {
@@ -38,7 +48,10 @@
     "oops": "Ой!",
     "unexpected": "Сталася неочікувана помилка.",
     "notFound": "Запитувану сторінку не знайдено.",
-    "error": "Помилка"
+    "error": "Помилка",
+    "diagnostic_report": "Діагностичний звіт",
+    "returnToBase": "Повернутися до бази",
+    "resetSystems": "Перезавантажити системи"
   },
   "common": {
     "toggleTheme": "Змінити тему"

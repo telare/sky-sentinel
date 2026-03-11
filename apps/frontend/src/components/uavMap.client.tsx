@@ -77,8 +77,8 @@ export default function UavMap({
   return (
     <div className="h-full w-full rounded-xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-900">
       <MapContainer
-        center={currentPos}
-        zoom={15}
+        center={[51.4504, 30.5245]}
+        zoom={10}
         scrollWheelZoom={true}
         className="h-full w-full"
       >
@@ -112,7 +112,7 @@ export default function UavMap({
         {/* 4. Active UAV Marker */}
         <Marker position={currentPos} icon={uavIcon}>
           <Popup>
-            <div className="text-xs font-mono">
+            <div className="text-xs ">
               <strong>SkySentinel UAV</strong>
               <br />
               Lat: {currentPos[0].toFixed(4)}

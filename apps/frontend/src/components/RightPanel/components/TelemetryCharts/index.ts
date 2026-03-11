@@ -1,1 +1,1 @@
-export * from "./TelemetryChats";
+export { default as TelemetryCharts } from "./TelemetryCharts";

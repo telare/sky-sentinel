@@ -20,6 +20,7 @@ import { join } from 'path';
         BACKEND_PORT: Joi.number().required(),
         FRONTEND_PORT: Joi.number().required(),
         FRONTEND_URL: Joi.string().required(),
+        GOOGLE_AI_KEY: Joi.string().required(),
       }),
     }),
   ],

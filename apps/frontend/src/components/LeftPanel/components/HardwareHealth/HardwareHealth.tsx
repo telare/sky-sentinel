@@ -33,7 +33,7 @@ export function HardwareHealth({
         {/* Battery Container */}
         <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-green-500/20 bg-green-500/10 p-3 shadow-[inset_0_0_15px_rgba(34,197,94,0.1)]">
           <Battery className="h-8 w-8 text-green-500" />
-          <span className="text-lg font-bold font-mono text-green-500">
+          <span className="text-lg font-bold  text-green-500">
             {battery}%
           </span>
         </div>
@@ -45,7 +45,7 @@ export function HardwareHealth({
             {/* Simple visual semi-circle track simulation */}
             <div className="absolute -inset-1 border-2 border-yellow-500/20 border-t-yellow-500 rounded-full rotate-45" />
           </div>
-          <span className="text-lg font-bold font-mono text-yellow-500">
+          <span className="text-lg font-bold  text-yellow-500">
             {temp}°C
           </span>
         </div>
@@ -63,7 +63,7 @@ export function HardwareHealth({
             <span className="text-[9px] uppercase font-bold text-muted-foreground">
               {t("hardwareHealth.latency")}
             </span>
-            <span className="text-xs font-bold font-mono text-cyan-500">
+            <span className="text-xs font-bold  text-cyan-500">
               {latency}ms
             </span>
           </div>

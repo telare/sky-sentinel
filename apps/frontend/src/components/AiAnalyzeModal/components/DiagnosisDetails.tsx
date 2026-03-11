@@ -19,7 +19,7 @@ export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
           Telemetry Snapshot
         </h4>
 
-        <div className="space-y-3 font-mono text-sm relative z-20">
+        <div className="space-y-3  text-sm relative z-20">
           {/* Pitch */}
           <div className="flex items-center justify-between bg-slate-900/50 p-2 rounded border border-slate-800/50 hover:bg-slate-800/50 transition-colors">
             <div className="flex items-center gap-2 text-slate-300">

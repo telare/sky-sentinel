@@ -29,6 +29,16 @@
     "title": "Telemetry Charts",
     "altitudeHistory": "Altitude History (m)",
     "batteryLevelHistory": "Battery Level History (%)",
+    "verticalSpeedHistory": "Vertical Speed History (m/s)",
+    "airspeedHistory": "Airspeed History (m/s)",
+    "groundSpeedHistory": "Ground Speed History (m/s)",
+    "pitchHistory": "Pitch History (°)",
+    "rollHistory": "Roll History (°)",
+    "throttleHistory": "Throttle History (%)",
+    "temperatureHistory": "Temperature History (°C)",
+    "rssiHistory": "Signal Strength (RSSI)",
+    "latencyHistory": "Link Latency (ms)",
+    "servoCurrentHistory": "Servo Current (A)",
     "noData": "No data available"
   },
   "missionMap": {
@@ -38,7 +48,10 @@
     "oops": "Oops!",
     "unexpected": "An unexpected error occurred.",
     "notFound": "The requested page could not be found.",
-    "error": "Error"
+    "error": "Error",
+    "diagnostic_report": "Diagnostic Report",
+    "returnToBase": "Return to Base",
+    "resetSystems": "Reset Systems"
   },
   "common": {
     "toggleTheme": "Toggle theme"

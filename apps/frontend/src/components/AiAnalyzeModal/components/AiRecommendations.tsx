@@ -45,7 +45,7 @@ export function AiRecommendations({
           <h5 className="text-[10px] font-semibold text-slate-500 tracking-widest uppercase mb-2">
             Explanation
           </h5>
-          <p className="font-mono text-sm text-slate-300 leading-relaxed min-h-20">
+          <p className=" text-sm text-slate-300 leading-relaxed min-h-20">
             {typedText}
             <span className="inline-block w-2 h-4 ml-1 bg-slate-400 animate-pulse translate-y-1" />
           </p>

@@ -39,7 +39,7 @@ export function RedundancyMonitor({
           <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-tight">
             {t("redundancyMonitor.airspeed")}
           </span>
-          <span className="text-3xl font-bold font-mono text-foreground">
+          <span className="text-3xl font-bold  text-foreground">
             {airspeed}
           </span>
         </div>
@@ -51,7 +51,7 @@ export function RedundancyMonitor({
           <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-tight">
             {t("redundancyMonitor.groundSpeed")}
           </span>
-          <span className="text-3xl font-bold font-mono text-foreground">
+          <span className="text-3xl font-bold  text-foreground">
             {groundSpeed}
           </span>
         </div>
@@ -73,7 +73,7 @@ export function RedundancyMonitor({
               />
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-[10px] font-mono text-muted-foreground">
+              <span className="text-[10px]  text-muted-foreground">
                 Δ = {delta}
               </span>
               <span
