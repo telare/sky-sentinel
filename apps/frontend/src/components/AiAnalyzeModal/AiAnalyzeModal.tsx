@@ -22,6 +22,7 @@ import {
   View,
   StyleSheet,
   PDFDownloadLink,
+  Font,
 } from "@react-pdf/renderer";
 interface AiAnalyzeModalProps {
   open: boolean;
@@ -29,10 +30,24 @@ interface AiAnalyzeModalProps {
   failureLog: FailureLog;
 }
 
+Font.register({
+  family: "Roboto",
+  fonts: [
+    {
+      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf",
+      fontWeight: "normal",
+    },
+    {
+      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf",
+      fontWeight: "bold",
+    },
+  ],
+});
+
 const pdfStyles = StyleSheet.create({
   page: {
     padding: 40,
-    fontFamily: "Helvetica",
+    fontFamily: "Roboto",
     backgroundColor: "#ffffff",
   },
   header: {
@@ -160,30 +175,44 @@ const AiFailureReport = ({
       {/* Header */}
       <View style={pdfStyles.header}>
         <View>
-          <Text style={pdfStyles.title}>{t("aiAnalyzeModal.report.title")}</Text>
-          <Text style={pdfStyles.subtitle}>{t("aiAnalyzeModal.report.subtitle")}</Text>
+          <Text style={pdfStyles.title}>
+            {t("aiAnalyzeModal.report.title")}
+          </Text>
+          <Text style={pdfStyles.subtitle}>
+            {t("aiAnalyzeModal.report.subtitle")}
+          </Text>
         </View>
         <View style={{ alignItems: "flex-end" }}>
           <Text style={pdfStyles.value}>
             {new Date(failureLog.timestamp).toLocaleString()}
           </Text>
-          <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.incidentId")}: {failureLog.id.slice(0, 8)}</Text>
+          <Text style={pdfStyles.label}>
+            {t("aiAnalyzeModal.report.incidentId")}: {failureLog.id.slice(0, 8)}
+          </Text>
         </View>
       </View>
 
       {/* Overview */}
       <View style={pdfStyles.section}>
-        <Text style={pdfStyles.sectionTitle}>{t("aiAnalyzeModal.report.overview")}</Text>
+        <Text style={pdfStyles.sectionTitle}>
+          {t("aiAnalyzeModal.report.overview")}
+        </Text>
         <View style={pdfStyles.row}>
-          <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.description")}:</Text>
+          <Text style={pdfStyles.label}>
+            {t("aiAnalyzeModal.report.description")}:
+          </Text>
           <Text style={pdfStyles.value}>{failureLog.description}</Text>
         </View>
         <View style={pdfStyles.row}>
-          <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.severity")}:</Text>
+          <Text style={pdfStyles.label}>
+            {t("aiAnalyzeModal.report.severity")}:
+          </Text>
           <Text
             style={[
               pdfStyles.value,
-              { color: analysis.severity === "CRITICAL" ? "#e11d48" : "#d97706" },
+              {
+                color: analysis.severity === "CRITICAL" ? "#e11d48" : "#d97706",
+              },
             ]}
           >
             {analysis.severity}
@@ -193,13 +222,22 @@ const AiFailureReport = ({
 
       {/* AI Analysis */}
       <View style={pdfStyles.section}>
-        <Text style={pdfStyles.sectionTitle}>{t("aiAnalyzeModal.report.aiDiagnostic")}</Text>
+        <Text style={pdfStyles.sectionTitle}>
+          {t("aiAnalyzeModal.report.aiDiagnostic")}
+        </Text>
         <View style={pdfStyles.criticalBox}>
-          <Text style={pdfStyles.rootCauseText}>{t("aiAnalyzeModal.status.rootCause")}: {analysis.root_cause}</Text>
+          <Text style={pdfStyles.rootCauseText}>
+            {t("aiAnalyzeModal.status.rootCause")}: {analysis.root_cause}
+          </Text>
           <Text style={pdfStyles.bodyText}>{analysis.explanation}</Text>
         </View>
-        
-        <Text style={[pdfStyles.sectionTitle, { borderBottomWidth: 0, marginBottom: 5 }]}>
+
+        <Text
+          style={[
+            pdfStyles.sectionTitle,
+            { borderBottomWidth: 0, marginBottom: 5 },
+          ]}
+        >
           {t("aiAnalyzeModal.report.suggestedRemediation")}
         </Text>
         <View style={pdfStyles.warningBox}>
@@ -209,31 +247,53 @@ const AiFailureReport = ({
 
       {/* Telemetry Snapshot */}
       <View style={pdfStyles.section}>
-        <Text style={pdfStyles.sectionTitle}>{t("aiAnalyzeModal.report.telemetryEvidence")}</Text>
+        <Text style={pdfStyles.sectionTitle}>
+          {t("aiAnalyzeModal.report.telemetryEvidence")}
+        </Text>
         <View style={pdfStyles.telemetryGrid}>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.panels.evidence.pitch")}</Text>
+            <Text style={pdfStyles.label}>
+              {t("aiAnalyzeModal.panels.evidence.pitch")}
+            </Text>
             <Text style={pdfStyles.value}>{telemetry.pitch.toFixed(2)}°</Text>
           </View>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.panels.evidence.roll")}</Text>
+            <Text style={pdfStyles.label}>
+              {t("aiAnalyzeModal.panels.evidence.roll")}
+            </Text>
             <Text style={pdfStyles.value}>{telemetry.roll.toFixed(2)}°</Text>
           </View>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.panels.evidence.throttle")}</Text>
-            <Text style={pdfStyles.value}>{(telemetry.throttle * 100).toFixed(0)}%</Text>
+            <Text style={pdfStyles.label}>
+              {t("aiAnalyzeModal.panels.evidence.throttle")}
+            </Text>
+            <Text style={pdfStyles.value}>
+              {(telemetry.throttle * 100).toFixed(0)}%
+            </Text>
           </View>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.verticalSpeed")}</Text>
-            <Text style={pdfStyles.value}>{telemetry.verticalSpeed.toFixed(2)} m/s</Text>
+            <Text style={pdfStyles.label}>
+              {t("aiAnalyzeModal.report.verticalSpeed")}
+            </Text>
+            <Text style={pdfStyles.value}>
+              {telemetry.verticalSpeed.toFixed(2)} m/s
+            </Text>
           </View>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.airspeed")}</Text>
-            <Text style={pdfStyles.value}>{telemetry.airspeed.toFixed(2)} m/s</Text>
+            <Text style={pdfStyles.label}>
+              {t("aiAnalyzeModal.report.airspeed")}
+            </Text>
+            <Text style={pdfStyles.value}>
+              {telemetry.airspeed.toFixed(2)} m/s
+            </Text>
           </View>
           <View style={pdfStyles.telemetryItem}>
-            <Text style={pdfStyles.label}>{t("aiAnalyzeModal.report.altitude")}</Text>
-            <Text style={pdfStyles.value}>{telemetry.altitude.toFixed(1)} m</Text>
+            <Text style={pdfStyles.label}>
+              {t("aiAnalyzeModal.report.altitude")}
+            </Text>
+            <Text style={pdfStyles.value}>
+              {telemetry.altitude.toFixed(1)} m
+            </Text>
           </View>
         </View>
       </View>
@@ -254,6 +314,7 @@ export function AiAnalyzeModal({
 }: AiAnalyzeModalProps) {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const { i18n, t } = useTranslation();
+  const responseLanguage = i18n.language;
   const { data, isLoading, error } = useQuery({
     queryKey: ["ai-analyze", failureLog.id],
     queryFn: async () => {
@@ -264,7 +325,7 @@ export function AiAnalyzeModal({
         },
         body: JSON.stringify({
           ...failureLog,
-          responseLanguage: i18n.language,
+          responseLanguage,
         }),
       });
 
@@ -342,10 +403,13 @@ export function AiAnalyzeModal({
                     t={t}
                   />
                 }
+                lang={responseLanguage}
                 fileName={`Incident_Report_${failureLog.id.slice(0, 8)}.pdf`}
               >
                 {({ loading }) =>
-                  loading ? t("aiAnalyzeModal.actions.preparingPdf") : t("aiAnalyzeModal.actions.downloadPdf")
+                  loading
+                    ? t("aiAnalyzeModal.actions.preparingPdf")
+                    : t("aiAnalyzeModal.actions.downloadPdf")
                 }
               </PDFDownloadLink>
             ) : (
