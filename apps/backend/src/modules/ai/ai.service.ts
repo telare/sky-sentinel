@@ -4,21 +4,23 @@ import {
   Injectable,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { FailureLog, UAVdata } from '@prisma/client';
+import { FailureLog, Severity, UAVdata } from '@prisma/client';
+
 const FAILURE_ANALYZE_PROMPT = `
 You are an expert UAV (Unmanned Aerial Vehicle) Diagnostic Engineer. 
 Analyze telemetry data to diagnose flight failures for a drone.
 
 ### TELEMETRY CONTEXT:
-- Velocity: {airspeed} m/s
+- Velocity: {airspeed} m/s, {groundspeed} m/s
 - Attitude: Pitch {pitch}°, Roll {roll}°
 - Environment: Temp {temperature}°C
+- Servo: {servo_current}, vibration: {vibration} (m/s²  [X, Y, Z])
 - System: Battery {battery}%, Altitude: {altitude}
 - Error Log: {failureDescription}
 
 ### TASK:
 1. Identify the likely Root Cause (Mechanical, Software, or Environmental).
-2. Assess the Severity (Low, Medium, High, Critical).
+2. Assess the Severity, possible types: {severity}.
 3. Provide a brief technical explanation.
 4. Suggest a specific Maintenance Action.
 
@@ -26,7 +28,7 @@ Analyze telemetry data to diagnose flight failures for a drone.
 Return ONLY a valid JSON object with this structure:
 {{
   "root_cause": "Detailed technical classification",
-  "severity": "LOW | MEDIUM | HIGH | CRITICAL",
+  "severity":  a value from this - {severity},
   "explanation": "Correlation-based technical reasoning",
   "suggested_action": "Specific repair step"
 }}
@@ -59,7 +61,11 @@ export class AiService {
       data.uav.airspeed?.toString() ?? '0',
     )
       .replace('{pitch}', data.uav.pitch?.toString() ?? '0')
+      .replace('{groundspeed}', data.uav.groundspeed?.toString() ?? '0')
+      .replace('{servo_current}', data.uav.servo_current?.toString() ?? '0')
+      .replace('{vibration}', data.uav.vibration?.toString() ?? '0')
       .replace('{roll}', data.uav.roll?.toString() ?? '0')
+      .replace('{severity}', JSON.stringify(Object.keys(Severity)))
       .replace('{temperature}', data.uav.temperature?.toString() ?? 'N/A')
       .replace('{battery}', data.uav.batt_rem?.toString() ?? 'N/A')
       .replace('{altitude}', data.uav.altitude?.toString() ?? 'N/A')
