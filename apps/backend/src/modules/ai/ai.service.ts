@@ -5,6 +5,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { FailureLog, Severity, UAVdata } from '@prisma/client';
+import { getDefaultSuggestion } from './failure-default-suggestions';
 
 const FAILURE_ANALYZE_PROMPT = `
 You are an expert UAV (Unmanned Aerial Vehicle) Diagnostic Engineer. 
@@ -56,6 +57,12 @@ export class AiService {
     failure: FailureLog;
     responseLang: string;
   }): Promise<AiAnalysis> {
+    const defaultAnalysis = getDefaultSuggestion({
+      failure: data.failure,
+      responseLang: data.responseLang,
+    });
+    if (defaultAnalysis) return defaultAnalysis;
+
     const finalPrompt = FAILURE_ANALYZE_PROMPT.replace(
       '{airspeed}',
       data.uav.airspeed?.toString() ?? '0',
