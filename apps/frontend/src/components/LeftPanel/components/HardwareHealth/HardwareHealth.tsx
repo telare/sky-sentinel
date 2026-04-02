@@ -8,6 +8,7 @@ import {
 import { Battery, Thermometer, MoreHorizontal, Wifi } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
+import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
 
 interface HardwareHealthProps {
   battery: number;
@@ -19,16 +20,17 @@ export function HardwareHealth({ battery, temp, rssi }: HardwareHealthProps) {
   const { t } = useTranslation();
 
   const getBatteryColor = (val: number) => {
-    if (val < 15)
+    if (val < FAILURE_CONSTANTS.BATT_CRITICAL_PCT)
       return "text-red-500 border-red-500/20 bg-red-500/10 shadow-[inset_0_0_15px_rgba(239,68,68,0.1)]";
-    if (val < 30)
+    if (val < FAILURE_CONSTANTS.BATT_WARNING_PCT)
       return "text-yellow-500 border-yellow-500/20 bg-yellow-500/10 shadow-[inset_0_0_15px_rgba(234,179,8,0.1)]";
     return "text-green-500 border-green-500/20 bg-green-500/10 shadow-[inset_0_0_15px_rgba(34,197,94,0.1)]";
   };
 
   const getTempColor = (val: number) => {
-    if (val > 75) return "text-red-500 border-red-500/20 bg-red-500/10";
-    if (val > 60)
+    if (val > FAILURE_CONSTANTS.TEMP_CRIT)
+      return "text-red-500 border-red-500/20 bg-red-500/10";
+    if (val > FAILURE_CONSTANTS.TEMP_WARN)
       return "text-yellow-500 border-yellow-500/20 bg-yellow-500/10";
     return "text-blue-500 border-blue-500/20 bg-blue-500/10";
   };
@@ -41,8 +43,8 @@ export function HardwareHealth({ battery, temp, rssi }: HardwareHealthProps) {
   // };
 
   const getRssiColor = (val: number) => {
-    if (val < -85) return "text-red-500 border-red-500/20 bg-red-500/10";
-    if (val < -75)
+    if (val < -FAILURE_CONSTANTS.RSSI_CRIT) return "text-red-500 border-red-500/20 bg-red-500/10";
+    if (val < -FAILURE_CONSTANTS.RSSI_WARN)
       return "text-yellow-500 border-yellow-500/20 bg-yellow-500/10";
     return "text-emerald-500 border-emerald-500/20 bg-emerald-500/10";
   };

@@ -3,7 +3,8 @@ import { FailureLog, FailureType, Severity, UAVdata } from '@prisma/client';
 import { CreateFailureDto } from './dto/create-failure.dto';
 import { UpdateFailureDto } from './dto/update-failure.dto';
 import { PrismaService } from 'src/database/prisma.service';
-import * as FAILURE_CONSTANTS from './failure-constants';
+import * as FAILURE_CONSTANTS from '@sky-sentinel/shared/failure-constants.ts';
+
 export interface FailureReport {
   incidentId: string;
   timestamp: string;

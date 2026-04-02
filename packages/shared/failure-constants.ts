@@ -56,3 +56,7 @@ export const GPS_MIN_FIX = 3;
 /** Telemetry timeout (seconds). If no packet arrives in this window,
  *  the link is considered lost regardless of rssi value. */
 export const TELEMETRY_TIMEOUT_S = 5;
+
+
+export const TEMP_CRIT = 75;
+export const TEMP_WARN = 60;

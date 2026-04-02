@@ -1,7 +1,7 @@
 import type { UAVdata } from "@prisma/client";
 import { ArrowDown, ArrowLeft, ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
+import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
 interface DiagnosisDetailsProps {
   uavData: UAVdata;
 }
@@ -37,7 +37,7 @@ export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
               </span>
               <div className="w-5 h-5 rounded bg-rose-950/50 flex items-center justify-center border border-rose-900/50">
                 <ArrowDown
-                  className={`w-3 h-3 ${uavData.pitch > 30 ? "text-rose-500" : "text-slate-500"}`}
+                  className={`w-3 h-3 ${uavData.pitch > FAILURE_CONSTANTS.PITCH_CRIT_DEG ? "text-rose-500" : "text-slate-500"}`}
                 />
               </div>
             </div>
@@ -53,7 +53,7 @@ export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
               <span className="text-slate-100">{uavData.roll.toFixed(1)}°</span>
               <div className="w-5 h-5 rounded bg-emerald-950/50 flex items-center justify-center border border-emerald-900/50">
                 <ArrowLeft
-                  className={`w-3 h-3 ${Math.abs(uavData.roll) > 20 ? "text-rose-500" : "text-emerald-500"}`}
+                  className={`w-3 h-3 ${Math.abs(uavData.roll) > FAILURE_CONSTANTS.ROLL_CRIT_DEG ? "text-rose-500" : "text-emerald-500"}`}
                 />
               </div>
             </div>

@@ -16,6 +16,7 @@ export function AiRecommendations({
   const { t } = useTranslation();
 
   // Simulated AI typing effect
+  // todo make this as custom hook
   useEffect(() => {
     let currentLength = 0;
     const typingInterval = setInterval(() => {

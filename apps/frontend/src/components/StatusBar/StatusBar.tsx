@@ -4,6 +4,7 @@ import { useTimeConnected } from "./hooks";
 import { useTranslation } from "react-i18next";
 import { useContext } from "react";
 import { LatestTelemetryContext } from "@/providers";
+import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
 
 export function StatusBar({ isConnected }: { isConnected: boolean }) {
   const { t } = useTranslation();
@@ -13,9 +14,9 @@ export function StatusBar({ isConnected }: { isConnected: boolean }) {
   if (!lastUavData) return null;
 
   const isMasterCaution =
-    lastUavData.battRem < 15 ||
-    lastUavData.temperature > 75 ||
-    lastUavData.rssi < -85;
+    lastUavData.battRem < FAILURE_CONSTANTS.BATT_CRITICAL_PCT ||
+    lastUavData.temperature > FAILURE_CONSTANTS.TEMP_CRIT ||
+    lastUavData.rssi < FAILURE_CONSTANTS.RSSI_CRIT;
 
   return (
     <header className="flex w-full flex-wrap items-center gap-2 py-2">

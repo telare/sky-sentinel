@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
 
 interface RedundancyMonitorProps {
   airspeed: number;
@@ -16,18 +17,22 @@ interface RedundancyMonitorProps {
 }
 
 export function RedundancyMonitor({
-  airspeed, groundSpeed,
+  airspeed,
+  groundSpeed,
 }: RedundancyMonitorProps) {
   const { t } = useTranslation();
   const delta = Math.abs(airspeed - groundSpeed).toFixed(3);
-  const isOk = Number(delta) <= 15;
+
+  const isOk = Number(delta) <= FAILURE_CONSTANTS.PITOT_DIVERGENCE_MS;
 
   return (
     <Card className="w-full">
       <CardHeader>
         <div className="flex flex-col gap-1">
           <CardTitle>{t("redundancyMonitor.title")}</CardTitle>
-          <CardDescription>{t("redundancyMonitor.description")}</CardDescription>
+          <CardDescription>
+            {t("redundancyMonitor.description")}
+          </CardDescription>
         </div>
         <CardAction>
           <MoreHorizontal size={14} />

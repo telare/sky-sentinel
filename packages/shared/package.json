@@ -1,0 +1,10 @@
+{
+  "name": "@sky-sentinel/shared",
+  "version": "1.0.0",
+  "exports": {
+    "./failure-constants.ts": {
+      "default": "./failure-constants.ts",
+      "types": "./failure-constants.ts"
+    }
+  }
+}
