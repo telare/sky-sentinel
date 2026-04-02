@@ -1,9 +1,9 @@
-import { defineConfig } from "vite";
-import path from "path";
-import { visualizer } from "rollup-plugin-visualizer";
-import { qrcode } from "vite-plugin-qrcode";
+import path from "node:path";
 import { reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
+import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig } from "vite";
+import { qrcode } from "vite-plugin-qrcode";
 
 export default defineConfig(({ command }) => {
   const common = {
@@ -19,7 +19,7 @@ export default defineConfig(({ command }) => {
     envDir: path.resolve(__dirname, "../../"),
   };
 
-  // dev 
+  // dev
   if (command === "serve") {
     return {
       plugins: [...common.plugins, qrcode()],

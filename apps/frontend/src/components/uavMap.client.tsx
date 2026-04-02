@@ -1,3 +1,5 @@
+import type { FlightPathPoint } from "@/providers/UavDataProviders/FlightHistoryContext";
+import L from "leaflet";
 import {
   MapContainer,
   TileLayer,
@@ -6,9 +8,7 @@ import {
   Polyline,
   Circle,
 } from "react-leaflet";
-import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import type { FlightPathPoint } from "@/providers";
 
 const uavIcon = L.divIcon({
   html: `
@@ -61,10 +61,10 @@ const homeIcon = L.divIcon({
 });
 
 interface UavMapProps {
-  currentPos: FlightPathPoint; 
+  currentPos: FlightPathPoint;
   history: FlightPathPoint[];
   homePos: [number, number];
-  geofenceRadius?: number; 
+  geofenceRadius?: number;
 }
 
 export default function UavMap({
@@ -115,9 +115,13 @@ export default function UavMap({
             <div className="text-xs ">
               <strong>SkySentinel UAV</strong>
               <br />
-              Lat: {currentPos.lat.toFixed(4)}
+              Lat:
+              {" "}
+              {currentPos.lat.toFixed(4)}
               <br />
-              Lng: {currentPos.lng.toFixed(4)}
+              Lng:
+              {" "}
+              {currentPos.lng.toFixed(4)}
             </div>
           </Popup>
         </Marker>

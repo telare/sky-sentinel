@@ -1,9 +1,9 @@
-import { useContext } from "react";
-import { LatestTelemetryContext } from "@/providers";
+import { use } from "react";
+import { LatestTelemetryContext } from "@/providers/UavDataProviders/LatestTelemetryContext";
 import { HardwareHealth, RedundancyMonitor } from "./components";
 
 export default function LeftPanel() {
-  const latestData = useContext(LatestTelemetryContext);
+  const latestData = use(LatestTelemetryContext);
   const { airspeed, groundspeed, battRem, temperature, rssi } = latestData || {
     airspeed: 0,
     groundspeed: 0,

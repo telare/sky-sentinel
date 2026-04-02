@@ -1,2 +1,1 @@
-export * from "./UavDataProvider";
-export * from "./ThemeProvider";
+export * from "./ThemeProvider/ThemeProvider";

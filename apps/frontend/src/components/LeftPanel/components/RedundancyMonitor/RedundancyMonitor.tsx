@@ -1,4 +1,6 @@
+import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
 import { MoreHorizontal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardHeader,
@@ -8,8 +10,6 @@ import {
   CardAction,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
-import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
 
 interface RedundancyMonitorProps {
   airspeed: number;
@@ -79,7 +79,9 @@ export function RedundancyMonitor({
             </div>
             <div className="flex flex-col items-center">
               <span className="text-[10px]  text-muted-foreground">
-                Δ = {Number(delta).toFixed(2)}
+                Δ =
+                {" "}
+                {Number(delta).toFixed(2)}
               </span>
               <span
                 className={cn(

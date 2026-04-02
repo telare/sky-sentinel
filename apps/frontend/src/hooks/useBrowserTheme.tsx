@@ -1,7 +1,7 @@
 import type { SupportedThemes } from "@/providers";
 import { useState, useEffect } from "react";
 
-const useBrowserTheme = (): SupportedThemes => {
+function useBrowserTheme(): SupportedThemes {
   const [theme, setTheme] = useState<SupportedThemes>("dark");
 
   useEffect(() => {
@@ -12,6 +12,6 @@ const useBrowserTheme = (): SupportedThemes => {
   }, []);
 
   return theme;
-};
+}
 
 export default useBrowserTheme;

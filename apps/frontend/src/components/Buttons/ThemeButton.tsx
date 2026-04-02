@@ -1,19 +1,20 @@
-import { useThemeContext } from "@/providers";
-import { Switch } from "@/components/ui/switch";
 import { useTranslation } from "react-i18next";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { useThemeContext } from "@/providers/ThemeProvider";
 
-export const ThemeButton = ({
+export function ThemeButton({
   size = "default",
 }: {
   size?: "sm" | "default" | "lg";
-}) => {
+}) {
   const { t } = useTranslation();
   const themeContext = useThemeContext();
 
   const { userTheme, toggleTheme } = themeContext;
   const handleThemeChange = () => {
-    if (toggleTheme) toggleTheme();
+    if (toggleTheme)
+      toggleTheme();
   };
 
   return (
@@ -32,4 +33,4 @@ export const ThemeButton = ({
       />
     </div>
   );
-};
+}

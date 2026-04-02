@@ -3,6 +3,7 @@ import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import eslintNestJs from '@darraghor/eslint-plugin-nestjs-typed';
 
 export default [
   {
@@ -11,6 +12,7 @@ export default [
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   eslintPluginPrettierRecommended,
+  ...eslintNestJs.configs.flatRecommended,
   {
     languageOptions: {
       globals: {
@@ -30,6 +32,8 @@ export default [
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
+      '@darraghor/nestjs-typed/controllers-should-supply-api-tags': 'warn',
+      '@darraghor/nestjs-typed/api-method-should-specify-api-response': 'warn',
     },
   },
 ];

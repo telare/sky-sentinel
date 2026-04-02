@@ -1,7 +1,7 @@
 import type { FailureLog } from "@prisma/client";
 import { useEffect, useState } from "react";
 
-export const useGetFailureLogs = () => {
+export function useGetFailureLogs() {
   const fetchFailures = async () => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     if (!backendUrl) {
@@ -30,4 +30,4 @@ export const useGetFailureLogs = () => {
   }, []);
 
   return { failureLogs };
-};
+}

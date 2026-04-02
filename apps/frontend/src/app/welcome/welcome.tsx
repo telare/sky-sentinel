@@ -7,15 +7,13 @@ import {
   TelemetryCharts,
 } from "@/components/RightPanel/components";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
-import {
-  LatestTelemetryProvider,
-  FlightHistoryProvider,
-  ChartsHistoryProvider,
-} from "@/providers/UavDataProvider";
+import { ChartsHistoryProvider } from "@/providers/UavDataProviders/ChartsHistoryContext/ChartsHistoryProvider";
+import { FlightHistoryProvider } from "@/providers/UavDataProviders/FlightHistoryContext";
+import { LatestTelemetryProvider } from "@/providers/UavDataProviders/LatestTelemetryContext";
 
 export default function Welcome() {
-  const { latestTelemetry, flightHistory, chartsHistory, isConnected } =
-    useSocketConnection();
+  const { latestTelemetry, flightHistory, chartsHistory, isConnected }
+    = useSocketConnection();
 
   return (
     <div className="w-full px-10 py-5 flex flex-col justify-start items-center h-full min-h-screen flex-wrap">

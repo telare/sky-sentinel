@@ -1,4 +1,9 @@
+import type { FailureLog } from "@prisma/client";
+import { Severity } from "@prisma/client";
 import { FileText, MoreHorizontal } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { AiAnalyzeModal } from "@/components/AiAnalyzeModal";
 import {
   Card,
   CardHeader,
@@ -6,13 +11,9 @@ import {
   CardAction,
   CardContent,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { Severity, type FailureLog } from "@prisma/client";
-import { useGetFailureLogs } from "./hooks";
 import { Virtualizer } from "@/components/Virtualizer";
-import { useTranslation } from "react-i18next";
-import { AiAnalyzeModal } from "@/components/AiAnalyzeModal";
-import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { useGetFailureLogs } from "./hooks";
 
 export function EventDiagnosticLog() {
   const { failureLogs } = useGetFailureLogs();
@@ -47,8 +48,8 @@ export function EventDiagnosticLog() {
                   <div
                     className={cn(
                       "h-5 w-5 shrink-0 rounded-full flex items-center justify-center",
-                      entry.severity === Severity.CRITICAL &&
-                        "bg-destructive shadow-[0_0_10px_rgba(239,68,68,0.5)]",
+                      entry.severity === Severity.CRITICAL
+                      && "bg-destructive shadow-[0_0_10px_rgba(239,68,68,0.5)]",
                       entry.severity === Severity.WARNING && "bg-yellow-500",
                       entry.severity === Severity.INFO && "bg-green-500",
                     )}
@@ -70,10 +71,10 @@ export function EventDiagnosticLog() {
                     <span
                       className={cn(
                         "text-[10px] font-black uppercase tracking-wider",
-                        entry.severity === Severity.CRITICAL &&
-                          "text-destructive",
-                        entry.severity === Severity.WARNING &&
-                          "text-yellow-500",
+                        entry.severity === Severity.CRITICAL
+                        && "text-destructive",
+                        entry.severity === Severity.WARNING
+                        && "text-yellow-500",
                         entry.severity === Severity.INFO && "text-green-500",
                       )}
                     >

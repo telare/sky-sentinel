@@ -1,6 +1,6 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card"; // Ensure this is your Tactical Card
+import { cn } from "@/lib/utils";
 
 interface StatusBarItemProps extends React.ComponentProps<typeof Card> {
   icon?: React.ReactNode;
@@ -35,12 +35,12 @@ export default function StatusBarItem({
         "flex flex-row items-center gap-2 min-w-fit w-full md:w-auto px-3.5 py-2 transition-all duration-300",
         variants[variant],
         // Logic for the pulsing Master Caution from the reference photo
-        isAlerting &&
-          variant === "critical" &&
-          "animate-pulse border-destructive bg-destructive/20 shadow-[0_0_25px_rgba(239,68,68,0.4)]",
-        isAlerting &&
-          variant === "success" &&
-          "shadow-[0_0_15px_rgba(34,197,94,0.2)]",
+        isAlerting
+        && variant === "critical"
+        && "animate-pulse border-destructive bg-destructive/20 shadow-[0_0_25px_rgba(239,68,68,0.4)]",
+        isAlerting
+        && variant === "success"
+        && "shadow-[0_0_15px_rgba(34,197,94,0.2)]",
         className,
       )}
       {...props}

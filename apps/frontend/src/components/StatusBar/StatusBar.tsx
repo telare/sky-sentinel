@@ -1,22 +1,23 @@
+import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
 import { Activity, Wifi, AlertTriangle } from "lucide-react";
+import { use } from "react";
+import { useTranslation } from "react-i18next";
+import { LatestTelemetryContext } from "@/providers/UavDataProviders/LatestTelemetryContext";
 import StatusBarItem from "./components/StatusBarItem";
 import { useTimeConnected } from "./hooks";
-import { useTranslation } from "react-i18next";
-import { useContext } from "react";
-import { LatestTelemetryContext } from "@/providers";
-import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
 
 export function StatusBar({ isConnected }: { isConnected: boolean }) {
   const { t } = useTranslation();
-  const lastUavData = useContext(LatestTelemetryContext);
+  const lastUavData = use(LatestTelemetryContext);
   const { timeConnected } = useTimeConnected(isConnected);
 
-  if (!lastUavData) return null;
+  if (!lastUavData)
+    return null;
 
-  const isMasterCaution =
-    lastUavData.battRem < FAILURE_CONSTANTS.BATT_CRITICAL_PCT ||
-    lastUavData.temperature > FAILURE_CONSTANTS.TEMP_CRIT ||
-    lastUavData.rssi < FAILURE_CONSTANTS.RSSI_CRIT;
+  const isMasterCaution
+    = lastUavData.battRem < FAILURE_CONSTANTS.BATT_CRITICAL_PCT
+      || lastUavData.temperature > FAILURE_CONSTANTS.TEMP_CRIT
+      || lastUavData.rssi < FAILURE_CONSTANTS.RSSI_CRIT;
 
   return (
     <header className="flex w-full flex-wrap items-center gap-2 py-2">
@@ -45,11 +46,11 @@ export function StatusBar({ isConnected }: { isConnected: boolean }) {
       <StatusBarItem
         label={t("statusBar.systemHeartbeat")}
         value={`${timeConnected}s`}
-        icon={
+        icon={(
           <Activity
             className={`size-6 ${isConnected ? "text-green-500" : "text-red-500"}`}
           />
-        }
+        )}
       />
     </header>
   );

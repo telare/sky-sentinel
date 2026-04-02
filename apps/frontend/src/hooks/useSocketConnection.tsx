@@ -1,11 +1,12 @@
-import { io, Socket } from "socket.io-client";
-import { useEffect, useRef, useState } from "react";
-import type { FlightPathPoint } from "@/providers/UavDataProvider";
 import type { UAVdata } from "@prisma/client";
+import type { Socket } from "socket.io-client";
+import type { FlightPathPoint } from "@/providers/UavDataProviders/FlightHistoryContext";
+import { useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
 
-export const useSocketConnection = () => {
-  const URL =
-    process.env.NODE_ENV === "production" ? undefined : "http://localhost:3003";
+export function useSocketConnection() {
+  const URL
+    = process.env.NODE_ENV === "production" ? undefined : "http://localhost:3003";
 
   const [isConnected, setIsConnected] = useState(false);
   const [latestTelemetry, setLatestTelemetry] = useState<UAVdata | null>(null);
@@ -34,7 +35,7 @@ export const useSocketConnection = () => {
     function onTelemetryEvent(value: UAVdata) {
       setLatestTelemetry(value);
 
-      setFlightHistory((prev) => [
+      setFlightHistory(prev => [
         ...prev,
         { lat: value.latitude, lng: value.longitude },
       ]);
@@ -63,4 +64,4 @@ export const useSocketConnection = () => {
   }, []);
 
   return { isConnected, latestTelemetry, flightHistory, chartsHistory };
-};
+}

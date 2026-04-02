@@ -1,3 +1,6 @@
+import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
+import { Battery, Thermometer, MoreHorizontal, Wifi } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardAction,
@@ -5,10 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui";
-import { Battery, Thermometer, MoreHorizontal, Wifi } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
 
 interface HardwareHealthProps {
   battery: number;
@@ -43,7 +43,8 @@ export function HardwareHealth({ battery, temp, rssi }: HardwareHealthProps) {
   // };
 
   const getRssiColor = (val: number) => {
-    if (val < -FAILURE_CONSTANTS.RSSI_CRIT) return "text-red-500 border-red-500/20 bg-red-500/10";
+    if (val < -FAILURE_CONSTANTS.RSSI_CRIT)
+      return "text-red-500 border-red-500/20 bg-red-500/10";
     if (val < -FAILURE_CONSTANTS.RSSI_WARN)
       return "text-yellow-500 border-yellow-500/20 bg-yellow-500/10";
     return "text-emerald-500 border-emerald-500/20 bg-emerald-500/10";
@@ -66,7 +67,10 @@ export function HardwareHealth({ battery, temp, rssi }: HardwareHealthProps) {
           )}
         >
           <Battery className="h-6 w-6" />
-          <span className="text-lg font-bold">{battery.toFixed(2)}%</span>
+          <span className="text-lg font-bold">
+            {battery.toFixed(2)}
+            %
+          </span>
         </div>
 
         {/* Temperature Container */}
@@ -79,7 +83,10 @@ export function HardwareHealth({ battery, temp, rssi }: HardwareHealthProps) {
           <div className="relative">
             <Thermometer className="h-6 w-6" />
           </div>
-          <span className="text-lg font-bold">{temp.toFixed(2)}°C</span>
+          <span className="text-lg font-bold">
+            {temp.toFixed(2)}
+            °C
+          </span>
         </div>
 
         {/* RSSI Container */}
@@ -94,7 +101,11 @@ export function HardwareHealth({ battery, temp, rssi }: HardwareHealthProps) {
             <span className="text-[9px] uppercase font-bold opacity-70">
               RSSI
             </span>
-            <span className="text-lg font-bold">{rssi.toFixed(2)} dBm</span>
+            <span className="text-lg font-bold">
+              {rssi.toFixed(2)}
+              {" "}
+              dBm
+            </span>
           </div>
         </div>
 

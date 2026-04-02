@@ -1,3 +1,5 @@
+import { MoreHorizontal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   AreaChart,
   Area,
@@ -7,7 +9,6 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import { MoreHorizontal } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -15,7 +16,6 @@ import {
   CardAction,
   CardContent,
 } from "@/components/ui/card";
-import { useTranslation } from "react-i18next";
 
 export function TelemetryMiniChart({
   title,
@@ -51,96 +51,98 @@ export function TelemetryMiniChart({
       </CardHeader>
 
       <CardContent className="h-35 w-full p-0 pt-4 flex justify-center items-center">
-        {data && data.length !== 0 ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart
-              data={data}
-              margin={{ top: 5, right: 15, left: -20, bottom: 0 }}
-            >
-              <defs>
-                <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={color} stopOpacity={0.3} />
-                  <stop offset="95%" stopColor={color} stopOpacity={0} />
-                </linearGradient>
-              </defs>
+        {data && data.length !== 0
+          ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={data}
+                  margin={{ top: 5, right: 15, left: -20, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={color} stopOpacity={0.3} />
+                      <stop offset="95%" stopColor={color} stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
 
-              <CartesianGrid
-                strokeDasharray="0"
-                vertical={true}
-                horizontal={true}
-                stroke="#1e293b"
-                opacity={0.5}
-              />
+                  <CartesianGrid
+                    strokeDasharray="0"
+                    vertical={true}
+                    horizontal={true}
+                    stroke="#1e293b"
+                    opacity={0.5}
+                  />
 
-              <XAxis
-                dataKey="x"
-                type="number"
-                scale="time"
-                domain={["auto", "auto"]}
-                axisLine={false}
-                tickFormatter={formatTime}
-                minTickGap={30}
-                tickLine={false}
-                tick={{
-                  fill: "#64748b",
-                  fontSize: 12,
-                  fontFamily: "monospace",
-                }}
-                dy={5}
-              />
+                  <XAxis
+                    dataKey="x"
+                    type="number"
+                    scale="time"
+                    domain={["auto", "auto"]}
+                    axisLine={false}
+                    tickFormatter={formatTime}
+                    minTickGap={30}
+                    tickLine={false}
+                    tick={{
+                      fill: "#64748b",
+                      fontSize: 12,
+                      fontFamily: "monospace",
+                    }}
+                    dy={5}
+                  />
 
-              <YAxis
-                domain={[
-                  (min: number) => {
-                    const padding = Math.abs(min * 0.2);
-                    return Math.floor(min - padding);
-                  },
-                  (max: number) => {
-                    const padding = Math.abs(max * 0.2);
-                    return Math.ceil(max + padding);
-                  },
-                ]}
-                axisLine={false}
-                tickLine={false}
-                tick={{
-                  fill: "#64748b",
-                  fontSize: 12,
-                  fontFamily: "monospace",
-                }}
-              />
+                  <YAxis
+                    domain={[
+                      (min: number) => {
+                        const padding = Math.abs(min * 0.2);
+                        return Math.floor(min - padding);
+                      },
+                      (max: number) => {
+                        const padding = Math.abs(max * 0.2);
+                        return Math.ceil(max + padding);
+                      },
+                    ]}
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{
+                      fill: "#64748b",
+                      fontSize: 12,
+                      fontFamily: "monospace",
+                    }}
+                  />
 
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#0f172a",
-                  borderColor: "#1e293b",
-                  borderRadius: "8px",
-                  fontSize: "12px",
-                  fontFamily: "monospace",
-                  color: "#f8fafc",
-                  textTransform: "uppercase",
-                }}
-                itemStyle={{ color: color }}
-                labelFormatter={(label) => formatTime(label)}
-                formatter={(value) => [value, title]}
-                cursor={{ stroke: color, strokeWidth: 1, strokeDasharray: "4 4" }}
-              />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#0f172a",
+                      borderColor: "#1e293b",
+                      borderRadius: "8px",
+                      fontSize: "12px",
+                      fontFamily: "monospace",
+                      color: "#f8fafc",
+                      textTransform: "uppercase",
+                    }}
+                    itemStyle={{ color }}
+                    labelFormatter={label => formatTime(label)}
+                    formatter={value => [value, title]}
+                    cursor={{ stroke: color, strokeWidth: 1, strokeDasharray: "4 4" }}
+                  />
 
-              <Area
-                type="linear"
-                dataKey="y"
-                stroke={color}
-                strokeWidth={2}
-                fillOpacity={1}
-                fill={`url(#${gradientId})`}
-                isAnimationActive={false}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        ) : (
-          <p className="text-slate-500 text-sm">
-            {t("telemetryCharts.noData")}
-          </p>
-        )}
+                  <Area
+                    type="linear"
+                    dataKey="y"
+                    stroke={color}
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill={`url(#${gradientId})`}
+                    isAnimationActive={false}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            )
+          : (
+              <p className="text-slate-500 text-sm">
+                {t("telemetryCharts.noData")}
+              </p>
+            )}
       </CardContent>
     </Card>
   );

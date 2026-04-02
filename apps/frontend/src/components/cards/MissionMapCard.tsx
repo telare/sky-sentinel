@@ -1,22 +1,22 @@
-import { Suspense, useContext, useEffect, useState } from "react";
-import { Card, CardContent, CardHeader } from "../ui";
-import { lazy } from "react";
-import { FlightHistoryContext } from "@/providers";
+import { Suspense, use, useEffect, useState, lazy } from "react";
 import { useTranslation } from "react-i18next";
+import { FlightHistoryContext } from "@/providers/UavDataProviders/FlightHistoryContext";
+import { Card, CardContent, CardHeader } from "../ui";
+
 const UavMap = lazy(() => import("../../components/uavMap.client"));
 
 export default function MissionMapCard() {
   const { t } = useTranslation();
-  const flightHistory = useContext(FlightHistoryContext);
+  const flightHistory = use(FlightHistoryContext);
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  const { lat: currentLatitude, lng: currentLongitude } = flightHistory[
-    flightHistory.length - 1
-  ] || {
+  const { lat: currentLatitude, lng: currentLongitude } = flightHistory.at(
+    -1,
+  ) || {
     lat: 0,
     lng: 0,
   };
@@ -34,20 +34,22 @@ export default function MissionMapCard() {
     <Card className="w-full h-200 max-w-295 xl:max-w-5xl">
       <CardHeader>{t("missionMap.title")}</CardHeader>
       <CardContent className="h-full p-0 relative">
-        {!isMounted ? (
-          LoadingSkeleton
-        ) : (
-          <Suspense fallback={LoadingSkeleton}>
-            <UavMap
-              currentPos={{
-                lat: currentLatitude,
-                lng: currentLongitude,
-              }}
-              homePos={homePos}
-              history={history}
-            />
-          </Suspense>
-        )}
+        {!isMounted
+          ? (
+              LoadingSkeleton
+            )
+          : (
+              <Suspense fallback={LoadingSkeleton}>
+                <UavMap
+                  currentPos={{
+                    lat: currentLatitude,
+                    lng: currentLongitude,
+                  }}
+                  homePos={homePos}
+                  history={history}
+                />
+              </Suspense>
+            )}
       </CardContent>
     </Card>
   );

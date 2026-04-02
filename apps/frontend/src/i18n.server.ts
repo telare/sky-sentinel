@@ -1,7 +1,7 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import { resolve } from "node:path";
-import { readFileSync } from "node:fs";
 
 const SUPPORTED_LNGS = ["en", "ua"];
 const FALLBACK_LNG = "en";
@@ -11,7 +11,7 @@ export async function getLocale(request: Request) {
   const cookieHeader = request.headers.get("Cookie");
   if (cookieHeader) {
     const cookies = Object.fromEntries(
-      cookieHeader.split("; ").map((c) => c.split("=")),
+      cookieHeader.split("; ").map(c => c.split("=")),
     );
     if (cookies["i18n-locale"] && SUPPORTED_LNGS.includes(cookies["i18n-locale"])) {
       return cookies["i18n-locale"];
@@ -32,7 +32,7 @@ export async function getLocale(request: Request) {
 
 export async function initI18nServer(locale: string) {
   const i18nInstance = i18n.createInstance();
-  
+
   // Load the translation file for the current locale
   const localesPath = resolve(process.cwd(), "public", "locales");
   const filePath = resolve(localesPath, locale, "translation.json");
@@ -46,8 +46,8 @@ export async function initI18nServer(locale: string) {
       supportedLngs: SUPPORTED_LNGS,
       resources: {
         [locale]: {
-          translation: resource
-        }
+          translation: resource,
+        },
       },
       interpolation: {
         escapeValue: false,

@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { DialogClose } from "@/components/ui/dialog";
-import { useTranslation } from "react-i18next";
 
 interface AiStatusHeaderProps {
   severity: string;
@@ -24,7 +24,10 @@ export function AiStatusHeader({ severity, timestamp }: AiStatusHeaderProps) {
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
           </span>
           <span className="text-xs font-semibold text-slate-400 tracking-widest uppercase">
-            {t("aiAnalyzeModal.header.liveAnalysis")} — {formattedTime}
+            {t("aiAnalyzeModal.header.liveAnalysis")}
+            {" "}
+            —
+            {formattedTime}
           </span>
         </div>
       </div>

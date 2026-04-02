@@ -1,7 +1,8 @@
 import type { UAVdata } from "@prisma/client";
+import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
 import { ArrowDown, ArrowLeft, ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import * as FAILURE_CONSTANTS from "@sky-sentinel/shared/failure-constants.ts";
+
 interface DiagnosisDetailsProps {
   uavData: UAVdata;
 }
@@ -29,11 +30,15 @@ export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
           <div className="flex items-center justify-between bg-slate-900/50 p-2 rounded border border-slate-800/50 hover:bg-slate-800/50 transition-colors">
             <div className="flex items-center gap-2 text-slate-300">
               <ArrowDown className="w-4 h-4 text-slate-500" />
-              <span>{t("aiAnalyzeModal.panels.evidence.pitch")}:</span>
+              <span>
+                {t("aiAnalyzeModal.panels.evidence.pitch")}
+                :
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-slate-100">
-                {uavData.pitch.toFixed(1)}°
+                {uavData.pitch.toFixed(1)}
+                °
               </span>
               <div className="w-5 h-5 rounded bg-rose-950/50 flex items-center justify-center border border-rose-900/50">
                 <ArrowDown
@@ -47,10 +52,16 @@ export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
           <div className="flex items-center justify-between bg-slate-900/50 p-2 rounded border border-slate-800/50 hover:bg-slate-800/50 transition-colors">
             <div className="flex items-center gap-2 text-slate-300">
               <ArrowLeft className="w-4 h-4 text-slate-500" />
-              <span>{t("aiAnalyzeModal.panels.evidence.roll")}:</span>
+              <span>
+                {t("aiAnalyzeModal.panels.evidence.roll")}
+                :
+              </span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-slate-100">{uavData.roll.toFixed(1)}°</span>
+              <span className="text-slate-100">
+                {uavData.roll.toFixed(1)}
+                °
+              </span>
               <div className="w-5 h-5 rounded bg-emerald-950/50 flex items-center justify-center border border-emerald-900/50">
                 <ArrowLeft
                   className={`w-3 h-3 ${Math.abs(uavData.roll) > FAILURE_CONSTANTS.ROLL_CRIT_DEG ? "text-rose-500" : "text-emerald-500"}`}
@@ -63,11 +74,15 @@ export function DiagnosisDetails({ uavData }: DiagnosisDetailsProps) {
           <div className="flex items-center justify-between bg-slate-900/50 p-2 rounded border border-slate-800/50 hover:bg-slate-800/50 transition-colors">
             <div className="flex items-center gap-2 text-slate-300">
               <ArrowUp className="w-4 h-4 text-slate-500" />
-              <span>{t("aiAnalyzeModal.panels.evidence.throttle")}:</span>
+              <span>
+                {t("aiAnalyzeModal.panels.evidence.throttle")}
+                :
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-slate-100">
-                {(uavData.throttle * 100).toFixed(0)}%
+                {(uavData.throttle * 100).toFixed(0)}
+                %
               </span>
               <div className="w-5 h-5 rounded bg-emerald-950/50 flex items-center justify-center border border-emerald-900/50">
                 <ArrowUp className="w-3 h-3 text-emerald-500" />

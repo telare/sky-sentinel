@@ -1,7 +1,8 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
-import React, { useRef } from "react";
+import * as React from "react";
+import { useRef } from "react";
 
-export const Virtualizer = ({ children }: { children: React.ReactNode[] }) => {
+export function Virtualizer({ children }: { children: React.ReactNode[] }) {
   // The scrollable element for your list
   const parentRef = useRef<HTMLDivElement | null>(null);
   const childrenArray = React.Children.toArray(children);
@@ -32,7 +33,7 @@ export const Virtualizer = ({ children }: { children: React.ReactNode[] }) => {
             position: "relative",
           }}
         >
-          {rowVirtualizer.getVirtualItems().map((virtualItem) => (
+          {rowVirtualizer.getVirtualItems().map(virtualItem => (
             <div
               key={virtualItem.key}
               style={{
@@ -51,4 +52,4 @@ export const Virtualizer = ({ children }: { children: React.ReactNode[] }) => {
       </div>
     </>
   );
-};
+}

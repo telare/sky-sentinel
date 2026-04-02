@@ -1,6 +1,12 @@
 import { FailureType, Severity } from '@prisma/client';
-import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
-
+import {
+  IsBoolean,
+  IsDateString,
+  IsEnum,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 export class FailureAnalyzeDto {
   @IsEnum(Severity)
   severity: Severity;
@@ -8,6 +14,8 @@ export class FailureAnalyzeDto {
   @IsString()
   id: string;
 
+  @IsDateString()
+  @Type(() => Date)
   timestamp: Date;
 
   @IsEnum(FailureType)

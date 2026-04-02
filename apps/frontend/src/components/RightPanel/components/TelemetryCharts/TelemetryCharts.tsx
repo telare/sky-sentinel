@@ -1,9 +1,9 @@
-import { Card, CardTitle, CardHeader } from "@/components/ui/card";
-import { useTranslation } from "react-i18next";
-import { useContext } from "react";
-import { ChartsHistoryContext } from "@/providers";
-import { TelemetryMiniChart } from "@/components/TelemetryMiniChart";
 import type { UAVdata } from "@prisma/client";
+import { use } from "react";
+import { useTranslation } from "react-i18next";
+import { TelemetryMiniChart } from "@/components/TelemetryMiniChart";
+import { Card, CardTitle, CardHeader } from "@/components/ui/card";
+import { ChartsHistoryContext } from "@/providers/UavDataProviders/ChartsHistoryContext";
 
 interface ChartConfig {
   field: keyof UAVdata;
@@ -32,7 +32,7 @@ const CHART_CONFIGS: ChartConfig[] = [
 
 export default function TelemetryCharts() {
   const { t } = useTranslation();
-  const chartsHistory = useContext(ChartsHistoryContext);
+  const chartsHistory = use(ChartsHistoryContext);
 
   return (
     <Card className="w-full bg-slate-950/20 border-slate-900 shadow-xl overflow-hidden">
@@ -45,7 +45,7 @@ export default function TelemetryCharts() {
 
       <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
         {CHART_CONFIGS.map((config) => {
-          const chartData = chartsHistory.map((entry) => ({
+          const chartData = chartsHistory.map(entry => ({
             x: new Date(entry.timestamp).getTime(),
             y: Number(
               (
@@ -53,7 +53,7 @@ export default function TelemetryCharts() {
               ).toFixed(4),
             ),
           }));
-       
+
           return (
             <div
               key={config.field}

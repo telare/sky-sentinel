@@ -23,7 +23,8 @@ export function AiRecommendations({
       if (currentLength <= explanation.length) {
         setTypedText(explanation.slice(0, currentLength));
         currentLength += 2; // Adjust speed here
-      } else {
+      }
+      else {
         clearInterval(typingInterval);
       }
     }, 20);
@@ -39,7 +40,9 @@ export function AiRecommendations({
         {/* Root Cause Section */}
         <div className="border-b border-rose-900/50 bg-rose-950/10 p-3">
           <h4 className="text-xs font-semibold text-rose-500 tracking-widest uppercase">
-            {t("aiAnalyzeModal.status.rootCause")}: {rootCause}
+            {t("aiAnalyzeModal.status.rootCause")}
+            :
+            {rootCause}
           </h4>
         </div>
 

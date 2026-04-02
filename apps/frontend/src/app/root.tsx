@@ -1,3 +1,10 @@
+import type { Route } from "./+types/root";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AlertTriangle, Home, RefreshCcw } from "lucide-react";
+import { Suspense, useEffect, useState } from "react";
+import { CookiesProvider } from "react-cookie";
+import { useTranslation } from "react-i18next";
 import {
   isRouteErrorResponse,
   Links,
@@ -8,18 +15,11 @@ import {
   useLoaderData,
   Link,
 } from "react-router";
-
+import { Button } from "@/components/ui/button";
+import ThemeContextProvider from "@/providers/ThemeProvider/ThemeProvider.js";
+import { getLocale, initI18nServer } from "../i18n.server";
 import "./app.css";
 import "../i18n.js";
-import type { Route } from "./+types/root";
-import { useTranslation } from "react-i18next";
-import ThemeContextProvider from "@/providers/ThemeProvider";
-import { Suspense, useEffect, useState } from "react";
-import { CookiesProvider } from "react-cookie";
-import { getLocale, initI18nServer } from "../i18n.server";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AlertTriangle, Home, RefreshCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export const links: Route.LinksFunction = () => [
   {
@@ -119,9 +119,10 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : t("errors.error");
-    details =
-      error.status === 404 ? t("errors.notFound") : error.statusText || details;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
+    details
+      = error.status === 404 ? t("errors.notFound") : error.statusText || details;
+  }
+  else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
   }

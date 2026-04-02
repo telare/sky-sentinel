@@ -1,46 +1,45 @@
 {
-  "include": [
-    "**/*",
-    "**/.server/**/*",
-    "**/.client/**/*",
-    ".react-router/types/**/*"
-  ],
   "extends": "@sky-sentinel/typescript/tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["node", "vite/client"],
     "target": "ES2022",
-    "module": "ES2022",
-    "rootDirs": [".", "./.react-router/types"],
-    "useDefineForClassFields": true,
-
-    "esModuleInterop": true,
-    "verbatimModuleSyntax": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
     "jsx": "react-jsx",
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "moduleDetection": "force",
+    "useDefineForClassFields": true,
 
     /* Path aliases */
     "baseUrl": ".",
+    "rootDirs": [".", "./.react-router/types"],
+    "module": "ES2022",
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
     "paths": {
       "@/*": ["./src/*"],
       "@/shared/*": ["./src/shared/*"],
       "@/store/*": ["./src/store/*"],
       "@/assets/*": ["./src/assets/*"]
-    }
-  }
+    },
+    "resolveJsonModule": true,
+    "types": ["node", "vite/client"],
+    "allowImportingTsExtensions": true,
+
+    /* Linting */
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": [
+    "**/*",
+    "**/.server/**/*",
+    "**/.client/**/*",
+    ".react-router/types/**/*"
+  ]
 }
