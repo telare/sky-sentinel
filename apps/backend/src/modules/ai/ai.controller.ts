@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AiService } from './ai.service';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from 'src/modules/database/prisma.service';
 import { FailureAnalyzeDto } from './dto/failure-analyze.dto';
 
 @Controller('/ai')

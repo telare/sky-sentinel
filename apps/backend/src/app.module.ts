@@ -6,12 +6,14 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { TelemetryParseModule } from './modules/temelemtry-parser/telemetry-parser.module';
 import { join } from 'path';
+import { DatabaseModule } from './modules/database/database.module';
 @Module({
   imports: [
     FailuresModule,
     AiModule,
     ValidatorModule,
     TelemetryParseModule,
+    DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: join(process.cwd(), '../../.env'),
