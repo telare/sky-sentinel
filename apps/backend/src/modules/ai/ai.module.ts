@@ -3,8 +3,10 @@ import { AiService } from './ai.service';
 import { ConfigService } from '@nestjs/config';
 import { AiController } from './ai.controller';
 import { GoogleGenAI } from '@google/genai';
+import { DatabaseModule } from '../database/database.module';
 
 @Module({
+  imports: [DatabaseModule],
   controllers: [AiController],
   providers: [
     AiService,
